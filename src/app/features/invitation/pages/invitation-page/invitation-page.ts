@@ -15,7 +15,7 @@ import { Rsvp } from '../../components/rsvp/rsvp';
   imports: [Hero, GraduateProfile, EventDetails, GraduationGallery, Rsvp, Closing],
   template: `
     @let r = resolved();
-    <main>
+    <main [attr.data-theme]="r.theme">
       <app-hero [content]="r.content.hero" [image]="r.image" [imageAlt]="r.guest.name" />
       <app-graduate-profile [content]="r.content.profile" [info]="r.info" />
       <app-event-details [content]="r.content.event" [info]="r.info" />

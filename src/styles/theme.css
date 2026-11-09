@@ -44,3 +44,21 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Guest themes. Tailwind utilities read the --color-* variables, so overriding them on an
+ * ancestor re-colors everything inside it. The default (blue) theme is defined by @theme above.
+ */
+[data-theme='pink'] {
+  --color-navy: #6b1f45;
+  --color-royal: #db2777;
+  --color-sky: #f472b6;
+  --color-pastel: #f9a8d4;
+  --color-ice: #fce7f3;
+  --color-soft: #fdf2f8;
+  --color-offwhite: #fff8fb;
+  --color-muted: #80586b;
+  --color-ink: #3b1d2c;
+  --shadow-card: 0 10px 40px -12px rgb(107 31 69 / 0.2);
+  --shadow-glow: 0 0 0 4px rgb(244 114 182 / 0.35);
+}

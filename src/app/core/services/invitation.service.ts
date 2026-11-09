@@ -3,7 +3,7 @@ import { defaultInvitation } from '../config/default-invitation.config';
 import { graduationInfo } from '../config/graduation-info.config';
 import { defaultGuest } from '../config/guests.config';
 import { GraduationInfo } from '../models/graduation-info.model';
-import { Guest } from '../models/guest.model';
+import { Guest, GuestTheme } from '../models/guest.model';
 import { ResolvedInvitation } from '../models/invitation.model';
 import { deepMerge } from '../utils/deep-merge';
 import { GuestService } from './guest.service';
@@ -13,6 +13,7 @@ export interface ResolvedGuestInvitation {
   content: ResolvedInvitation;
   /** Guest image, with fallbacks applied. */
   image: string;
+  theme: GuestTheme;
   info: GraduationInfo;
 }
 
@@ -23,7 +24,13 @@ export class InvitationService {
   resolve(guestId: string | null | undefined): ResolvedGuestInvitation {
     const guest = this.guests.getById(guestId);
     const content = deepMerge(defaultInvitation, guest.invitation ?? {});
-    return { guest, content, image: this.resolveImage(guest, content), info: graduationInfo };
+    return {
+      guest,
+      content,
+      image: this.resolveImage(guest, content),
+      theme: guest.theme ?? 'blue',
+      info: graduationInfo,
+    };
   }
 
   /** guest image → hero image → default guest image → graduate portrait */

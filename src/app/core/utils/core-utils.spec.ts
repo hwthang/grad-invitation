@@ -70,6 +70,18 @@ describe('InvitationService', () => {
     expect(resolved.image).toBeTruthy();
   });
 
+  it('applies a per-guest theme and defaults to blue', () => {
+    expect(service.resolve('guest-004').theme).toBe('pink');
+    expect(service.resolve('guest-001').theme).toBe('blue');
+    expect(service.resolve('unknown').theme).toBe('blue');
+  });
+
+  it('finds Thanh Hằng by name and alias', () => {
+    const guests = new GuestService();
+    expect(guests.findByName('nguyen thi thanh hang')?.id).toBe('guest-004');
+    expect(guests.findByName('Thanh Hằng')?.id).toBe('guest-004');
+  });
+
   it('falls back to the default image when the guest has none', () => {
     expect(service.resolve('guest-002').image).toBe('/assets/images/default-guest.svg');
   });

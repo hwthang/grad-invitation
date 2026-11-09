@@ -63,4 +63,31 @@ export const guestMap: Record<string, Guest> = {
       closing: { additionalMessage: 'Cảm ơn anh đã luôn đồng hành!' },
     },
   },
+
+  'guest-004': {
+    id: 'guest-004',
+    name: 'Nguyễn Thị Thanh Hằng',
+    aliases: ['Thanh Hằng', 'Hằng'],
+    relationship: 'Partner',
+    theme: 'pink',
+    invitation: {
+      hero: {
+        greeting: 'Gửi Hằng,',
+        message:
+          'Ngày tốt nghiệp của mình sẽ trọn vẹn hơn rất nhiều nếu có Hằng ở bên cạnh. Mình muốn mời Hằng đến chung vui nhé!',
+      },
+      profile: {
+        heading: 'Một chặng đường có Hằng đồng hành',
+        description: 'Cảm ơn Hằng vì đã luôn ở bên, cùng mình đi qua những ngày vui lẫn những ngày mệt mỏi.',
+      },
+      rsvp: {
+        heading: 'Hằng sẽ đến cùng mình chứ?',
+        attendingButton: 'Chắc chắn rồi, em sẽ đến!',
+        decliningButton: 'Tiếc quá, lần này em bận mất rồi',
+      },
+      closing: {
+        additionalMessage: 'Có Hằng ở đó, mình sẽ thấy ngày hôm ấy thật đặc biệt.',
+      },
+    },
+  },
 };

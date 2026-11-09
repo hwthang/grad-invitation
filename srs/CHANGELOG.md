@@ -23,3 +23,10 @@ Deviations / additions made while implementing v2.1 (the SRS text itself is unch
 - The default gallery is **empty** (`gallery.images: []`). The Gallery section renders only when the resolved
   invitation has at least one image, so it is hidden unless a guest defines `invitation.gallery.images`.
   This narrows 7.4 ("use the default gallery"): the default gallery now has no images.
+
+## v2.1 — per-guest theme
+
+- `Guest` gained an optional `theme?: 'blue' | 'pink'` (default `blue`). The Invitation page sets
+  `data-theme` on its root element and `src/styles/theme.css` overrides the `--color-*` tokens for that theme.
+  The Welcome page always uses the default blue theme because the guest is not known yet.
+- To add a theme: add a value to `GuestTheme` and a matching `[data-theme='...']` block in `theme.css`.
