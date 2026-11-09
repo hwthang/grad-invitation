@@ -31,12 +31,12 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
               <div class="grid gap-4 sm:grid-cols-2">
                 <div data-reveal class="flex flex-col items-center rounded-3xl bg-white p-6 text-center shadow-card">
                   <i class="fa-regular fa-face-smile-beam mb-3 text-3xl text-royal" aria-hidden="true"></i>
-                  <app-button [fullWidth]="true" (clicked)="respond('ATTENDING')">{{ content().attendingButton }}</app-button>
+                  <app-button class="w-full flex-1" [fullWidth]="true" (clicked)="respond('ATTENDING')">{{ content().attendingButton }}</app-button>
                   <p class="mt-3 text-sm text-muted">{{ content().attendingDescription }}</p>
                 </div>
                 <div data-reveal class="flex flex-col items-center rounded-3xl bg-white p-6 text-center shadow-card">
                   <i class="fa-regular fa-face-smile mb-3 text-3xl text-sky" aria-hidden="true"></i>
-                  <app-button variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
+                  <app-button class="w-full flex-1" variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
                     {{ content().decliningButton }}
                   </app-button>
                   <p class="mt-3 text-sm text-muted">{{ content().decliningDescription }}</p>

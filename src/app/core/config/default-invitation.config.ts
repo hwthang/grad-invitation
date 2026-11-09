@@ -35,12 +35,8 @@ export const defaultInvitation: ResolvedInvitation = {
     closeLabel: 'Đóng',
     previousLabel: 'Ảnh trước',
     nextLabel: 'Ảnh sau',
-    images: [
-      { id: 'g1', src: '/assets/images/gallery/photo-1.svg', alt: 'Khoảnh khắc 1', caption: 'Những ngày đầu đại học' },
-      { id: 'g2', src: '/assets/images/gallery/photo-2.svg', alt: 'Khoảnh khắc 2', caption: 'Bên những người bạn' },
-      { id: 'g3', src: '/assets/images/gallery/photo-3.svg', alt: 'Khoảnh khắc 3', caption: 'Những đêm ôn thi' },
-      { id: 'g4', src: '/assets/images/gallery/photo-4.svg', alt: 'Khoảnh khắc 4', caption: 'Ngày bảo vệ đồ án' },
-    ],
+    // Empty by default: the gallery section is hidden unless a guest defines images.
+    images: [],
   },
 
   rsvp: {

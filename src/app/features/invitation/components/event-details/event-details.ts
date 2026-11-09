@@ -21,17 +21,17 @@ const DEFAULT_DURATION_HOURS = 3;
         <p data-reveal class="mt-6 text-center font-display text-xl text-navy">{{ info().event.title }}</p>
 
         <div class="mt-10 grid gap-4 sm:grid-cols-3">
-          <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card transition hover:-translate-y-1">
+          <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card transition-[translate] duration-300 hover:-translate-y-1">
             <i class="fa-regular fa-calendar mb-3 text-2xl text-royal" aria-hidden="true"></i>
             <p class="text-sm text-muted">{{ content().dateLabel }}</p>
             <p class="mt-1 font-medium text-navy">{{ eventDate() | date: 'dd/MM/yyyy' }}</p>
           </div>
-          <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card transition hover:-translate-y-1">
+          <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card transition-[translate] duration-300 hover:-translate-y-1">
             <i class="fa-regular fa-clock mb-3 text-2xl text-royal" aria-hidden="true"></i>
             <p class="text-sm text-muted">{{ content().timeLabel }}</p>
             <p class="mt-1 font-medium text-navy">{{ info().event.startTime }}</p>
           </div>
-          <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card transition hover:-translate-y-1">
+          <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card transition-[translate] duration-300 hover:-translate-y-1">
             <i class="fa-solid fa-location-dot mb-3 text-2xl text-royal" aria-hidden="true"></i>
             <p class="text-sm text-muted">{{ content().locationLabel }}</p>
             <p class="mt-1 font-medium text-navy">{{ info().event.location }}</p>
@@ -41,12 +41,12 @@ const DEFAULT_DURATION_HOURS = 3;
 
         <p data-reveal class="mx-auto mt-8 max-w-xl text-center text-lg text-muted">{{ content().invitationMessage }}</p>
 
-        <div data-reveal class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <app-button [href]="info().event.mapUrl">
+        <div data-reveal class="mx-auto mt-8 grid max-w-xl gap-3 sm:grid-cols-2">
+          <app-button [fullWidth]="true" [href]="info().event.mapUrl">
             <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
             {{ content().mapButtonLabel }}
           </app-button>
-          <app-button variant="secondary" [href]="calendarUrl()">
+          <app-button variant="secondary" [fullWidth]="true" [href]="calendarUrl()">
             <i class="fa-regular fa-calendar-plus" aria-hidden="true"></i>
             {{ content().calendarButtonLabel }}
           </app-button>

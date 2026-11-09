@@ -61,7 +61,7 @@ describe('InvitationService', () => {
     const { content } = service.resolve('guest-001');
     expect(content.hero.greeting).toBe('Gửi A,');
     expect(content.hero.subtitle).toBe(defaultInvitation.hero.subtitle);
-    expect(content.gallery.images).toEqual(defaultInvitation.gallery.images);
+    expect(content.gallery.images).toEqual([]);
   });
 
   it('resolves invalid ids to the default guest invitation and an image', () => {
@@ -76,10 +76,20 @@ describe('InvitationService', () => {
 });
 
 describe('gallery override', () => {
+  const images = [{ id: 'x', src: '/x.jpg' }];
 
-  it('keeps an explicitly empty gallery', () => {
-    const merged = deepMerge(defaultInvitation, { gallery: { images: [] } });
-    expect(merged.gallery.images).toEqual([]);
-    expect(defaultInvitation.gallery.images.length).toBeGreaterThan(0);
+  it('is empty by default so the gallery section is hidden', () => {
+    expect(defaultInvitation.gallery.images).toEqual([]);
+  });
+
+  it('uses a guest-provided gallery without mutating the default', () => {
+    const merged = deepMerge(defaultInvitation, { gallery: { images } });
+    expect(merged.gallery.images).toEqual(images);
+    expect(defaultInvitation.gallery.images).toEqual([]);
+  });
+
+  it('lets a guest explicitly clear their gallery', () => {
+    const withImages = deepMerge(defaultInvitation, { gallery: { images } });
+    expect(deepMerge(withImages, { gallery: { images: [] } }).gallery.images).toEqual([]);
   });
 });

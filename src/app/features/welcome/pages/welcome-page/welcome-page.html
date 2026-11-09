@@ -48,28 +48,30 @@
               [formGroup]="form"
               novalidate
             >
-              <label data-form-item for="guest-name" class="mb-2 block text-sm font-medium text-navy">
-                {{ content.form.label }}
-              </label>
-              <input
-                data-form-item
-                data-name-input
-                id="guest-name"
-                type="text"
-                autocomplete="name"
-                formControlName="name"
-                [placeholder]="content.form.placeholder"
-                [attr.aria-invalid]="showRequired()"
-                aria-describedby="guest-name-help"
-                class="w-full rounded-2xl border border-pastel bg-white px-4 py-3 text-lg text-ink outline-none transition placeholder:text-muted/60 focus:border-royal focus:shadow-glow"
-              />
+              <!-- Entrance target: the wrapper. Shake target: the input. They never share an element. -->
+              <div data-form-item>
+                <label for="guest-name" class="mb-2 block text-sm font-medium text-navy">
+                  {{ content.form.label }}
+                </label>
+                <input
+                  data-name-input
+                  id="guest-name"
+                  type="text"
+                  autocomplete="name"
+                  formControlName="name"
+                  [placeholder]="content.form.placeholder"
+                  [attr.aria-invalid]="showRequired()"
+                  aria-describedby="guest-name-help"
+                  class="w-full rounded-2xl border border-pastel bg-white px-4 py-3 text-lg text-ink outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted/60 focus:border-royal focus:shadow-glow"
+                />
 
-              <div id="guest-name-help" class="min-h-6 pt-2 text-sm" aria-live="polite">
-                @if (showRequired()) {
-                  <p class="text-red-600">{{ content.validation.required }}</p>
-                } @else if (showNotFound()) {
-                  <p class="text-royal">{{ content.validation.notFound }}</p>
-                }
+                <div id="guest-name-help" class="min-h-6 pt-2 text-sm" aria-live="polite">
+                  @if (showRequired()) {
+                    <p class="text-red-600">{{ content.validation.required }}</p>
+                  } @else if (showNotFound()) {
+                    <p class="text-royal">{{ content.validation.notFound }}</p>
+                  }
+                </div>
               </div>
 
               <div data-form-item class="mt-4">

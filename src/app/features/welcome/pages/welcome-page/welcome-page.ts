@@ -77,7 +77,11 @@ export class WelcomePage {
       this.showRequired.set(true);
       this.showNotFound.set(false);
       if (!prefersReducedMotion()) {
-        gsap.fromTo('[data-name-input]', { x: -8 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.2)' });
+        const input = this.host.querySelector('[data-name-input]');
+        if (input) {
+          gsap.killTweensOf(input);
+          gsap.fromTo(input, { x: -8 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.2)', clearProps: 'transform' });
+        }
       }
       return;
     }
@@ -101,9 +105,10 @@ export class WelcomePage {
   private playEntrance(): void {
     if (prefersReducedMotion()) return;
     this.ctx = gsap.context(() => {
-      gsap.from('[data-bg]', { opacity: 0, scale: 0.9, duration: 1.4, stagger: 0.2, ease: 'power2.out' });
+      const clearProps = 'transform,opacity';
+      gsap.from('[data-bg]', { opacity: 0, scale: 0.9, duration: 1.4, stagger: 0.2, ease: 'power2.out', clearProps });
       gsap
-        .timeline({ defaults: { ease: 'power3.out', duration: 0.8 } })
+        .timeline({ defaults: { ease: 'power3.out', duration: 0.8, clearProps } })
         .from('[data-hero-heading]', { opacity: 0, y: 20 })
         .from('[data-hero-subtitle]', { opacity: 0, y: 28 }, '-=0.5')
         .from('[data-form-item]', { opacity: 0, y: 24, stagger: 0.12 }, '-=0.4');

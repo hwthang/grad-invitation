@@ -17,3 +17,9 @@ Deviations / additions made while implementing v2.1 (the SRS text itself is unch
 - **Add to Calendar (FR-21):** implemented as a Google Calendar template link (3-hour default duration).
 - **Placeholder data:** graduate, university, venue and guest data are sample values to be replaced.
 - **Route `/welcome`:** legacy path redirects to `/`.
+
+## v2.1 — gallery default
+
+- The default gallery is **empty** (`gallery.images: []`). The Gallery section renders only when the resolved
+  invitation has at least one image, so it is hidden unless a guest defines `invitation.gallery.images`.
+  This narrows 7.4 ("use the default gallery"): the default gallery now has no images.
