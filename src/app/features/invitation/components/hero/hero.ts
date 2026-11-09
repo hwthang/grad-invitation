@@ -20,7 +20,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
           <img
             [src]="image()"
             [alt]="imageAlt()"
-            appImageFallback="/assets/images/default-guest.svg"
+            [appImageFallback]="fallbackImage()"
             class="size-full object-cover"
           />
         </div>
@@ -40,4 +40,5 @@ export class Hero {
   readonly content = input.required<ResolvedInvitation['hero']>();
   readonly image = input.required<string>();
   readonly imageAlt = input('');
+  readonly fallbackImage = input.required<string>();
 }

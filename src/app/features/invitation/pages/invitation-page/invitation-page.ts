@@ -16,10 +16,10 @@ import { Rsvp } from '../../components/rsvp/rsvp';
   template: `
     @let r = resolved();
     <main [attr.data-theme]="r.theme">
-      <app-hero [content]="r.content.hero" [image]="r.image" [imageAlt]="r.guest.name" />
-      <app-graduate-profile [content]="r.content.profile" [info]="r.info" />
+      <app-hero [content]="r.content.hero" [image]="r.image" [imageAlt]="r.guest.name" [fallbackImage]="r.fallbackImage" />
+      <app-graduate-profile [content]="r.content.profile" [info]="r.info" [portrait]="r.portrait" [fallbackImage]="r.fallbackImage" />
       <app-event-details [content]="r.content.event" [info]="r.info" />
-      <app-graduation-gallery [content]="r.content.gallery" />
+      <app-graduation-gallery [content]="r.content.gallery" [fallbackImage]="r.fallbackImage" />
       <app-rsvp [content]="r.content.rsvp" [guestId]="r.guest.id" [guestName]="r.guest.name" />
       <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
     </main>

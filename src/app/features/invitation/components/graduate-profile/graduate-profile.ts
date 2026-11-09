@@ -18,9 +18,9 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
         <div class="mt-12 grid items-center gap-10 md:grid-cols-2">
           <div data-reveal="left" class="mx-auto w-full max-w-sm overflow-hidden rounded-3xl bg-ice shadow-card">
             <img
-              [src]="info().portrait"
+              [src]="portrait()"
               [alt]="info().graduateName"
-              appImageFallback="/assets/images/default-guest.svg"
+              [appImageFallback]="fallbackImage()"
               class="aspect-[4/5] w-full object-cover"
               loading="lazy"
             />
@@ -67,4 +67,6 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
 export class GraduateProfile {
   readonly content = input.required<ResolvedInvitation['profile']>();
   readonly info = input.required<GraduationInfo>();
+  readonly portrait = input.required<string>();
+  readonly fallbackImage = input.required<string>();
 }

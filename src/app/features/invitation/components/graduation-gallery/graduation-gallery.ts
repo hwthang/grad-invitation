@@ -28,7 +28,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
                   <img
                     [src]="img.src"
                     [alt]="img.alt ?? img.caption ?? ''"
-                    appImageFallback="/assets/images/default-guest.svg"
+                    [appImageFallback]="fallbackImage()"
                     loading="lazy"
                     class="aspect-square w-full object-cover transition duration-500 group-hover:scale-105"
                   />
@@ -46,6 +46,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
         <app-image-lightbox
           [images]="images()"
           [index]="selected()!"
+          [fallbackImage]="fallbackImage()"
           [closeLabel]="content().closeLabel"
           [previousLabel]="content().previousLabel"
           [nextLabel]="content().nextLabel"
@@ -58,6 +59,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
 })
 export class GraduationGallery {
   readonly content = input.required<ResolvedInvitation['gallery']>();
+  readonly fallbackImage = input.required<string>();
 
   protected readonly images = computed(() => this.content().images);
   protected readonly selected = signal<number | null>(null);

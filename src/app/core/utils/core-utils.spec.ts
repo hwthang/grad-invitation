@@ -76,6 +76,17 @@ describe('InvitationService', () => {
     expect(service.resolve('unknown').theme).toBe('blue');
   });
 
+  it('swaps placeholder images to the pink variants only for pink guests', () => {
+    const pink = service.resolve('guest-004');
+    expect(pink.image).toBe('/assets/images/default-guest.pink.svg');
+    expect(pink.portrait).toBe('/assets/images/graduate/portrait.pink.svg');
+    expect(pink.fallbackImage).toBe('/assets/images/default-guest.pink.svg');
+
+    const blue = service.resolve('guest-002');
+    expect(blue.portrait).toBe('/assets/images/graduate/portrait.svg');
+    expect(blue.fallbackImage).toBe('/assets/images/default-guest.svg');
+  });
+
   it('finds Thanh Hằng by name and alias', () => {
     const guests = new GuestService();
     expect(guests.findByName('nguyen thi thanh hang')?.id).toBe('guest-004');

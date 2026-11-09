@@ -61,7 +61,7 @@ import { ImageFallbackDirective } from '../../directives/image-fallback.directiv
           <img
             [src]="img.src"
             [alt]="img.alt ?? img.caption ?? ''"
-            appImageFallback="/assets/images/default-guest.svg"
+            [appImageFallback]="fallbackImage()"
             class="mx-auto max-h-[75vh] rounded-2xl object-contain"
           />
           @if (img.caption) {
@@ -75,6 +75,7 @@ import { ImageFallbackDirective } from '../../directives/image-fallback.directiv
 export class ImageLightbox {
   readonly images = input.required<GalleryImage[]>();
   readonly index = input.required<number>();
+  readonly fallbackImage = input.required<string>();
   readonly closeLabel = input.required<string>();
   readonly previousLabel = input.required<string>();
   readonly nextLabel = input.required<string>();
