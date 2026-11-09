@@ -36,3 +36,9 @@ Deviations / additions made while implementing v2.1 (the SRS text itself is unch
 - Removed the Welcome "not found" message (`validation.notFound`, SRS 5.3/5.4). An unknown name now goes straight
   to the default invitation with no delay; the key was removed from `welcome-content.json` and `WelcomeContent`.
 - Replaced the default Angular favicon with `public/favicon.svg` (graduation cap, blue).
+
+## v2.1 — fireworks
+
+- The Invitation page plays a one-shot fireworks animation on entry (`shared/components/fireworks`).
+  Canvas-based, no extra dependency, colors per theme (`FIREWORK_COLORS` in `theme-assets.config.ts`).
+  It ignores pointer events, removes itself when finished, and is skipped under `prefers-reduced-motion`.

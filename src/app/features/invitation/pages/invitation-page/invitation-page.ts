@@ -2,7 +2,9 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
+import { FIREWORK_COLORS } from '../../../../core/config/theme-assets.config';
 import { InvitationService } from '../../../../core/services/invitation.service';
+import { Fireworks } from '../../../../shared/components/fireworks/fireworks';
 import { Closing } from '../../components/closing/closing';
 import { EventDetails } from '../../components/event-details/event-details';
 import { GraduateProfile } from '../../components/graduate-profile/graduate-profile';
@@ -12,10 +14,11 @@ import { Rsvp } from '../../components/rsvp/rsvp';
 
 @Component({
   selector: 'app-invitation-page',
-  imports: [Hero, GraduateProfile, EventDetails, GraduationGallery, Rsvp, Closing],
+  imports: [Hero, GraduateProfile, EventDetails, GraduationGallery, Rsvp, Closing, Fireworks],
   template: `
     @let r = resolved();
     <main [attr.data-theme]="r.theme">
+      <app-fireworks [colors]="fireworkColors()" />
       <app-hero [content]="r.content.hero" [image]="r.image" [imageAlt]="r.guest.name" [fallbackImage]="r.fallbackImage" />
       <app-graduate-profile [content]="r.content.profile" [info]="r.info" [portrait]="r.portrait" [fallbackImage]="r.fallbackImage" />
       <app-event-details [content]="r.content.event" [info]="r.info" />
@@ -35,4 +38,5 @@ export class InvitationPage {
 
   /** Re-resolved whenever the `guest` query param changes; invalid ids fall back to the default guest. */
   protected readonly resolved = computed(() => this.invitations.resolve(this.guestId()));
+  protected readonly fireworkColors = computed(() => FIREWORK_COLORS[this.resolved().theme]);
 }

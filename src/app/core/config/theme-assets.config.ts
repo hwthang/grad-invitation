@@ -13,3 +13,9 @@ const PLACEHOLDER_VARIANTS: Record<string, Partial<Record<GuestTheme, string>>> 
 export function themedAsset(path: string, theme: GuestTheme): string {
   return PLACEHOLDER_VARIANTS[path]?.[theme] ?? path;
 }
+
+/** Firework burst colors per theme. */
+export const FIREWORK_COLORS: Record<GuestTheme, readonly string[]> = {
+  blue: ['#2563EB', '#60A5FA', '#A7C7E7', '#FFFFFF', '#FACC15'],
+  pink: ['#DB2777', '#F472B6', '#F9A8D4', '#FFFFFF', '#FACC15'],
+};
