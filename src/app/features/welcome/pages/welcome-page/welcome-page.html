@@ -1,0 +1,91 @@
+<main
+  class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-soft to-white px-4 py-12"
+>
+  @switch (state().status) {
+    @case ('loading') {
+      <app-loading />
+    }
+
+    @case ('error') {
+      <!-- Safe fallback: the content file could not be loaded, so no configured text exists. -->
+      <div role="alert" class="max-w-sm rounded-3xl bg-white p-8 text-center shadow-card">
+        <i class="fa-solid fa-triangle-exclamation mb-3 text-3xl text-sky" aria-hidden="true"></i>
+        <p class="text-muted">Unable to load page content. Please refresh the page.</p>
+      </div>
+    }
+
+    @case ('ready') {
+      @if (state(); as s) {
+        @if (s.status === 'ready') {
+          @let content = s.content;
+
+          @if (content.decoration.enabled) {
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+              <div data-bg class="absolute -left-24 -top-24 size-80 rounded-full bg-pastel/40 blur-3xl"></div>
+              <div data-bg class="absolute -bottom-32 -right-24 size-96 rounded-full bg-ice blur-3xl"></div>
+              <div data-bg class="absolute right-1/4 top-1/4 size-40 rounded-full bg-sky/20 blur-3xl"></div>
+            </div>
+          }
+
+          <div class="relative z-10 w-full max-w-md text-center">
+            @if (content.decoration.showGraduationIcon) {
+              <div
+                data-hero-heading
+                class="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-white text-2xl text-royal shadow-card"
+              >
+                <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+              </div>
+            }
+
+            <h1 data-hero-heading class="font-display text-4xl font-medium leading-tight text-navy sm:text-5xl">
+              {{ content.hero.heading }}
+            </h1>
+            <p data-hero-subtitle class="mt-4 text-lg text-muted">{{ content.hero.subtitle }}</p>
+
+            <form
+              class="mt-10 rounded-3xl border border-ice bg-white/80 p-6 text-left shadow-card backdrop-blur sm:p-8"
+              (ngSubmit)="submit()"
+              [formGroup]="form"
+              novalidate
+            >
+              <label data-form-item for="guest-name" class="mb-2 block text-sm font-medium text-navy">
+                {{ content.form.label }}
+              </label>
+              <input
+                data-form-item
+                data-name-input
+                id="guest-name"
+                type="text"
+                autocomplete="name"
+                formControlName="name"
+                [placeholder]="content.form.placeholder"
+                [attr.aria-invalid]="showRequired()"
+                aria-describedby="guest-name-help"
+                class="w-full rounded-2xl border border-pastel bg-white px-4 py-3 text-lg text-ink outline-none transition placeholder:text-muted/60 focus:border-royal focus:shadow-glow"
+              />
+
+              <div id="guest-name-help" class="min-h-6 pt-2 text-sm" aria-live="polite">
+                @if (showRequired()) {
+                  <p class="text-red-600">{{ content.validation.required }}</p>
+                } @else if (showNotFound()) {
+                  <p class="text-royal">{{ content.validation.notFound }}</p>
+                }
+              </div>
+
+              <div data-form-item class="mt-4">
+                <app-button type="submit" [fullWidth]="true">
+                  {{ content.form.submitButton }}
+                  <i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i>
+                </app-button>
+              </div>
+
+              <p data-form-item class="mt-4 text-center text-sm text-muted">
+                {{ content.form.supportingText }}
+              </p>
+            </form>
+          </div>
+        }
+      }
+    }
+  }
+</main>

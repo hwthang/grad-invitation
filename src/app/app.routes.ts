@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'welcome' },
   {
-    path: 'welcome',
-    loadComponent: () => import('./pages/welcome/welcome').then((m) => m.Welcome),
+    path: '',
+    pathMatch: 'full',
+    loadChildren: () => import('./features/welcome/welcome.routes').then((m) => m.WELCOME_ROUTES),
   },
   {
     path: 'invitation',
-    loadComponent: () => import('./pages/invitation/invitation').then((m) => m.Invitation),
+    loadChildren: () =>
+      import('./features/invitation/invitation.routes').then((m) => m.INVITATION_ROUTES),
   },
-  { path: '**', redirectTo: 'welcome' },
+  { path: 'welcome', redirectTo: '', pathMatch: 'full' },
+  { path: '**', redirectTo: '' },
 ];

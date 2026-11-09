@@ -1,0 +1,20 @@
+{
+  "hero": {
+    "heading": "Bạn có một lời mời đặc biệt!",
+    "subtitle": "Một cột mốc đáng nhớ sẽ trọn vẹn hơn khi có sự hiện diện của những người thân yêu."
+  },
+  "form": {
+    "label": "Tên của bạn",
+    "placeholder": "Nhập tên của bạn...",
+    "submitButton": "Mở thư mời",
+    "supportingText": "Hãy nhập tên để nhận lời mời dành riêng cho bạn nhé!"
+  },
+  "validation": {
+    "required": "Bạn chưa nhập tên kìa!",
+    "notFound": "Không tìm thấy tên của bạn. Mình sẽ gửi bạn lời mời chung nhé!"
+  },
+  "decoration": {
+    "enabled": true,
+    "showGraduationIcon": true
+  }
+}

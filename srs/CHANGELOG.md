@@ -1,0 +1,19 @@
+# SRS Changelog
+
+## v2.1 — implementation notes
+
+Deviations / additions made while implementing v2.1 (the SRS text itself is unchanged):
+
+- **Assets location:** Angular 22 serves static files from `public/`, so the Welcome config lives at
+  `public/assets/config/welcome-content.json` (served at `/assets/config/welcome-content.json`)
+  instead of `src/assets/config/`. The same applies to `public/assets/images/**`.
+- **Placeholder images:** `.svg` placeholders are used instead of `.jpg` until real photos are added.
+- **Extra label fields:** every user-facing string must be configurable (SRS 4.1), so `InvitationContent`
+  gained optional label fields not listed in 8.2:
+  - `profile.universityLabel`, `profile.majorLabel`, `profile.yearLabel`
+  - `event.dateLabel`, `event.timeLabel`, `event.locationLabel`, `event.calendarButtonLabel`
+  - `gallery.closeLabel`, `gallery.previousLabel`, `gallery.nextLabel`
+  - `rsvp.changeButton`
+- **Add to Calendar (FR-21):** implemented as a Google Calendar template link (3-hour default duration).
+- **Placeholder data:** graduate, university, venue and guest data are sample values to be replaced.
+- **Route `/welcome`:** legacy path redirects to `/`.
