@@ -1,4 +1,14 @@
-import { Component, DestroyRef, ElementRef, afterNextRender, inject, input, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { prefersReducedMotion } from '../../animation';
 
 interface Rocket {
@@ -29,43 +39,60 @@ const PARTICLES_PER_BURST = 70;
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
 /**
- * One-shot fireworks over the page. Pointer-events are disabled, the canvas removes itself when
- * the show is over, and nothing runs when the visitor prefers reduced motion.
+ * Fireworks over the page. By default it plays once when it appears; with [autoplay]="false" it
+ * waits for play(). Pointer events are disabled, the canvas removes itself when the show is over,
+ * and nothing runs when the visitor prefers reduced motion.
  */
 @Component({
   selector: 'app-fireworks',
   template: `
-    @if (!finished()) {
-      <canvas #canvas aria-hidden="true" class="pointer-events-none fixed inset-0 z-40 size-full"></canvas>
+    @if (active()) {
+      <canvas #canvas aria-hidden="true" class="pointer-events-none fixed inset-0 z-[45] size-full"></canvas>
     }
   `,
 })
 export class Fireworks {
   /** Burst colors (any CSS color). */
   readonly colors = input.required<readonly string[]>();
+  readonly autoplay = input(true);
 
-  protected readonly finished = signal(false);
+  protected readonly active = signal(false);
 
+  private readonly injector = inject(Injector);
   private readonly canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   private frame = 0;
   private stop?: () => void;
 
   constructor() {
     inject(DestroyRef).onDestroy(() => this.stop?.());
-
     afterNextRender(() => {
-      const el = this.canvas()?.nativeElement;
-      if (!el || prefersReducedMotion()) {
-        this.finished.set(true);
-        return;
-      }
-      this.play(el);
+      if (this.autoplay()) this.play();
     });
   }
 
-  private play(canvas: HTMLCanvasElement): void {
+  /** Starts (or restarts) the show. */
+  play(): void {
+    if (prefersReducedMotion()) return;
+    if (this.active()) {
+      const el = this.canvas()?.nativeElement;
+      if (el) this.start(el);
+      return;
+    }
+    this.active.set(true);
+    afterNextRender(
+      () => {
+        const el = this.canvas()?.nativeElement;
+        if (el) this.start(el);
+        else this.active.set(false);
+      },
+      { injector: this.injector },
+    );
+  }
+
+  private start(canvas: HTMLCanvasElement): void {
+    this.stop?.();
     const ctx = canvas.getContext('2d');
-    if (!ctx) return this.finished.set(true);
+    if (!ctx) return this.active.set(false);
 
     let w = 0;
     let h = 0;
@@ -120,7 +147,7 @@ export class Fireworks {
     };
     const cleanup = () => {
       this.stop?.();
-      this.finished.set(true);
+      this.active.set(false);
     };
 
     const tick = (now: number) => {

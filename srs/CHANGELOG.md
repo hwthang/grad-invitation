@@ -42,3 +42,9 @@ Deviations / additions made while implementing v2.1 (the SRS text itself is unch
 - The Invitation page plays a one-shot fireworks animation on entry (`shared/components/fireworks`).
   Canvas-based, no extra dependency, colors per theme (`FIREWORK_COLORS` in `theme-assets.config.ts`).
   It ignores pointer events, removes itself when finished, and is skipped under `prefers-reduced-motion`.
+
+## v2.1 — RSVP celebration
+
+- Confirming attendance (explicit click only, not when a saved response is restored) plays fireworks again and
+  shows a dark blur behind the thank-you card. The blur is dismissed by click, Esc or after ~6 seconds.
+  Declining and changing the response show no effect. `Fireworks` gained `[autoplay]` and `play()`.
