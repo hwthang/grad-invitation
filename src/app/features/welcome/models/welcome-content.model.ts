@@ -13,7 +13,6 @@ export interface WelcomeContent {
 
   validation: {
     required: string;
-    notFound: string;
   };
 
   decoration: {

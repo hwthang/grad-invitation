@@ -68,8 +68,6 @@
                 <div id="guest-name-help" class="min-h-6 pt-2 text-sm" aria-live="polite">
                   @if (showRequired()) {
                     <p class="text-red-600">{{ content.validation.required }}</p>
-                  } @else if (showNotFound()) {
-                    <p class="text-royal">{{ content.validation.notFound }}</p>
                   }
                 </div>
               </div>

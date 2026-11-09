@@ -16,8 +16,6 @@ import { Loading } from '../../../../shared/components/loading/loading';
 import { WelcomeContent } from '../../models/welcome-content.model';
 import { WelcomeContentService } from '../../services/welcome-content.service';
 
-const NOT_FOUND_DELAY_MS = 1800;
-
 type LoadState =
   | { status: 'loading' }
   | { status: 'error' }
@@ -38,7 +36,6 @@ export class WelcomePage {
   protected readonly nameControl = new FormControl('', { nonNullable: true });
   protected readonly form = new FormGroup({ name: this.nameControl });
   protected readonly showRequired = signal(false);
-  protected readonly showNotFound = signal(false);
 
   private navigating = false;
   private animated = false;
@@ -55,7 +52,6 @@ export class WelcomePage {
 
     this.nameControl.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       this.showRequired.set(false);
-      this.showNotFound.set(false);
     });
 
     // Once the content is in the DOM: entrance animation + input focus.
@@ -75,7 +71,6 @@ export class WelcomePage {
     const entered = this.nameControl.value.trim().replace(/\s+/g, ' ');
     if (!entered) {
       this.showRequired.set(true);
-      this.showNotFound.set(false);
       if (!prefersReducedMotion()) {
         const input = this.host.querySelector('[data-name-input]');
         if (input) {
@@ -87,15 +82,9 @@ export class WelcomePage {
     }
 
     this.navigating = true;
-    const guest = this.guests.findByName(entered);
-    if (guest) {
-      this.open(guest.id);
-      return;
-    }
-
-    // Unknown name: tell the visitor, then continue with the generic invitation.
-    this.showNotFound.set(true);
-    setTimeout(() => this.open(this.guests.getDefault().id), NOT_FOUND_DELAY_MS);
+    // Unknown names continue with the generic (default guest) invitation.
+    const guest = this.guests.findByName(entered) ?? this.guests.getDefault();
+    this.open(guest.id);
   }
 
   private open(guestId: string): void {

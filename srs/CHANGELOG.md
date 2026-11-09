@@ -30,3 +30,9 @@ Deviations / additions made while implementing v2.1 (the SRS text itself is unch
   `data-theme` on its root element and `src/styles/theme.css` overrides the `--color-*` tokens for that theme.
   The Welcome page always uses the default blue theme because the guest is not known yet.
 - To add a theme: add a value to `GuestTheme` and a matching `[data-theme='...']` block in `theme.css`.
+
+## v2.1 — welcome flow and favicon
+
+- Removed the Welcome "not found" message (`validation.notFound`, SRS 5.3/5.4). An unknown name now goes straight
+  to the default invitation with no delay; the key was removed from `welcome-content.json` and `WelcomeContent`.
+- Replaced the default Angular favicon with `public/favicon.svg` (graduation cap, blue).
