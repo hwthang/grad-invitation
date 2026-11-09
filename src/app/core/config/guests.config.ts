@@ -71,22 +71,45 @@ export const guestMap: Record<string, Guest> = {
     relationship: 'Partner',
     theme: 'pink',
     invitation: {
+      // Voice: anh (graduate) speaking to em (Hằng).
       hero: {
-        greeting: 'Gửi Hằng,',
+        greeting: 'Gửi em Hằng,',
         message:
-          'Ngày tốt nghiệp của mình sẽ trọn vẹn hơn rất nhiều nếu có Hằng ở bên cạnh. Mình muốn mời Hằng đến chung vui nhé!',
+          'Ngày tốt nghiệp của anh sẽ trọn vẹn hơn rất nhiều nếu có em ở bên cạnh. Anh muốn mời em đến chung vui nhé!',
+        subtitle: 'Anh mong được gặp em trong ngày đặc biệt này!',
       },
       profile: {
-        heading: 'Một chặng đường có Hằng đồng hành',
-        description: 'Cảm ơn Hằng vì đã luôn ở bên, cùng mình đi qua những ngày vui lẫn những ngày mệt mỏi.',
+        heading: 'Một chặng đường có em đồng hành',
+        description: 'Cảm ơn em vì đã luôn ở bên, cùng anh đi qua những ngày vui lẫn những ngày mệt mỏi.',
+        personalMessage: 'Mỗi bước anh đi đều có một phần của em.',
+      },
+      event: {
+        subtitle: 'Anh hẹn gặp em trong ngày đặc biệt này nhé!',
+        invitationMessage: 'Có em ở đó, buổi lễ của anh sẽ thêm trọn vẹn.',
       },
       rsvp: {
-        heading: 'Hằng sẽ đến cùng mình chứ?',
+        heading: 'Em sẽ đến cùng anh chứ?',
+        subtitle:
+          'Anh rất mong được gặp em, nhưng dù thế nào cũng cảm ơn em đã dành thời gian ghé qua lời mời này nhé!',
         attendingButton: 'Chắc chắn rồi, em sẽ đến!',
+        attendingDescription: 'Em sẽ đến chung vui cùng anh!',
         decliningButton: 'Tiếc quá, lần này em bận mất rồi',
+        decliningDescription: 'Em gửi anh thật nhiều lời chúc nhé!',
+        attendingConfirmation: {
+          message: 'Anh rất vui khi biết em sẽ đến. Hẹn gặp em trong ngày đặc biệt nhé!',
+        },
+        decliningConfirmation: {
+          title: 'Không sao đâu em!',
+          message:
+            'Cảm ơn em đã phản hồi. Dù không thể gặp nhau lần này, anh vẫn rất trân trọng những lời chúc của em!',
+        },
       },
       closing: {
-        additionalMessage: 'Có Hằng ở đó, mình sẽ thấy ngày hôm ấy thật đặc biệt.',
+        heading: 'Cảm ơn em đã ghé thăm!',
+        message:
+          'Sự hiện diện của em sẽ là niềm vui lớn nhất của anh trong ngày đặc biệt này. Hy vọng chúng ta sẽ có thêm một kỷ niệm thật đẹp cùng nhau!',
+        signature: 'Thương em,',
+        additionalMessage: 'Có em ở đó, anh sẽ thấy ngày hôm ấy thật đặc biệt.',
       },
     },
   },
