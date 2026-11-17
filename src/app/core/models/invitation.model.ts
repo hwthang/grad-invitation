@@ -14,7 +14,6 @@ export interface InvitationContent {
 
   event?: {
     heading?: string;
-    invitationMessage?: string;
     mapButtonLabel?: string;
     calendarButtonLabel?: string;
     dateLabel?: string;

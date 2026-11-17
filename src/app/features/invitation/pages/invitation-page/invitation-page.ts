@@ -55,10 +55,6 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'erro
               <div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-10">
                 <app-details [event]="r.content.event" [info]="r.info" />
                 <div class="rounded-3xl bg-white p-6 shadow-card sm:p-8">
-                  <div class="mb-8 rounded-2xl bg-soft px-5 py-6 text-center">
-                    <i class="fa-solid fa-heart mb-2 text-xl text-royal" aria-hidden="true"></i>
-                    <p class="font-display text-lg font-medium leading-snug text-navy sm:text-xl">{{ r.content.event.invitationMessage }}</p>
-                  </div>
                   <app-rsvp
                     [content]="r.content.rsvp"
                     [status]="status()"

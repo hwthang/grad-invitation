@@ -10,7 +10,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
       <div>
         <i data-reveal class="fa-regular fa-face-smile-beam mb-3 text-2xl text-royal" aria-hidden="true"></i>
         <h2 data-reveal class="font-display text-xl font-medium text-navy">{{ content().heading }}</h2>
-        <p data-reveal class="mt-3 text-ink/80">{{ content().message }}</p>
+        <p data-reveal class="mt-3 font-display text-lg text-navy">{{ content().message }}</p>
 
         @if (content().additionalMessage) {
           <p data-reveal class="mt-2 italic text-muted">{{ content().additionalMessage }}</p>

@@ -27,7 +27,6 @@ export function defaultInvitationFor(address: Address = 'ban'): ResolvedInvitati
 
     event: {
       heading: 'Thông tin buổi lễ',
-      invitationMessage: `Sự có mặt của ${you} là niềm vui của ${me}.`,
       mapButtonLabel: 'Xem đường đi',
       calendarButtonLabel: 'Thêm vào lịch',
       dateLabel: 'Ngày',
@@ -62,7 +61,7 @@ export function defaultInvitationFor(address: Address = 'ban'): ResolvedInvitati
 
     closing: {
       heading: `Cảm ơn ${you}!`,
-      message: `Có ${you} ở đó là ${me} vui lắm rồi.`,
+      message: `Sự có mặt của ${you} là niềm vui của ${me}.`,
       signature: 'Thân mến,',
     },
   };

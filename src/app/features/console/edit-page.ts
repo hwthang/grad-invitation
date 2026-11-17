@@ -31,12 +31,6 @@ const GROUPS: FieldGroup[] = [
     ],
   },
   {
-    title: 'Thông tin buổi lễ',
-    fields: [
-      { path: 'event.invitationMessage', label: 'Lời mời tham dự' },
-    ],
-  },
-  {
     title: 'Xác nhận tham dự',
     fields: [
       { path: 'rsvp.heading', label: 'Tiêu đề' },
