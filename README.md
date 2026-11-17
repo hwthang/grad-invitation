@@ -11,28 +11,27 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 | `/console/edit/:key` | Edit one invitation |
 | `/invitations/:key` | Public invitation (envelope intro, RSVP) |
 
-## Data & running
+## Data (MongoDB Atlas)
 
-All data lives in one file, `../grad-invitation-data/data.json` (next to the project folder, so `ng serve` does not reload on every save), read and written by `server/index.mjs`. Override with the `DATA_FILE` env var.
+All invitations live in MongoDB, one document per invitation in the `invitations` collection.
+`server/invitation.service.mjs` (`InvitationService`) is the only code that talks to the database;
+`server/api.mjs` calls it directly.
+
+1. Create a free cluster on [MongoDB Atlas](https://cloud.mongodb.com), then **Database Access** → add a user
+   with a password, and **Network Access** → allow `0.0.0.0/0` (Vercel has no fixed IPs).
+2. **Connect → Drivers** → copy the connection string.
+3. Locally: copy `.env.example` to `.env` and fill in `MONGODB_URI`.
 
 ```bash
-npm run api    # API on :3000
+npm run api    # API on :3000 (reads .env)
 npm run dev    # Angular dev server on :4200, proxies /api to :3000
 npm run serve  # production: build + serve app and API on :3000
 ```
 
 ## Deploy on Vercel
 
-The API runs as serverless functions (`api/invitations/**`, all sharing `server/vercel-handler.mjs`) and keeps the same single `data.json`
-in a Vercel Blob store (public by default; set env `BLOB_ACCESS=private` if the store is private, the type must match).
-
-1. Import the repo in Vercel (build command and output dir come from `package.json` / `vercel.json`).
-2. Project → **Storage** → create a **Blob** store and connect it to the project.
-   This adds the `BLOB_READ_WRITE_TOKEN` env var.
-3. Redeploy. Open `/` and log in.
-
-Locally, `BLOB_READ_WRITE_TOKEN` is not set, so the file in `../grad-invitation-data/` is used.
-Writes use the blob ETag, so two simultaneous RSVPs do not overwrite each other.
+The API runs as serverless functions (`api/invitations/**`, all sharing `server/vercel-handler.mjs`).
+Project → **Settings → Environment Variables**: add `MONGODB_URI` (and optionally `MONGODB_DB`), then redeploy.
 
 > The admin login is checked in the browser only and the API has no auth, so anyone who knows the
 > URLs can call it. Treat this as a hobby setup, not a secured one.

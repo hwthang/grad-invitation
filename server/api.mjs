@@ -1,4 +1,4 @@
-// REST API for invitations, independent of where the data is stored (see stores.mjs).
+// REST API for invitations. Storage is delegated to an InvitationService (see invitation.service.mjs).
 const KEY_RE = /^[a-z0-9][a-z0-9-]{0,59}$/;
 const THEMES = ['blue', 'pink'];
 const ADDRESSES = ['anh', 'chi', 'em', 'ban'];
@@ -6,7 +6,6 @@ const STATUSES = ['PENDING', 'ATTENDING', 'NOT_ATTENDING'];
 const MAX_BODY = 4 * 1024 * 1024; // avatars are stored as small data URLs
 
 const isObj = (v) => typeof v === 'object' && v !== null && !Array.isArray(v);
-const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const httpError = (status, message) => Object.assign(new Error(message), { status });
 
 function send(res, status, body) {
@@ -77,11 +76,10 @@ function cleanContent(v) {
   return v;
 }
 
-function existing(db, key) {
-  if (!has(db.invitations, key)) throw httpError(404, 'Not found');
-  return db.invitations[key];
-}
-
+/**
+ * The store is a repository: list(), get(key), insert(inv), update(key, fn), remove(key).
+ * insert/update/remove throw 409/404 errors themselves; update's fn may be re-run on conflicts.
+ */
 export function createApi(store) {
   async function route(req, res, url) {
     const parts = url.pathname.split('/').filter(Boolean).slice(1); // drop "api"
@@ -91,63 +89,55 @@ export function createApi(store) {
     if (key !== undefined && !KEY_RE.test(key)) throw httpError(404, 'Not found');
 
     if (parts.length === 1) {
-      if (req.method === 'GET') return send(res, 200, Object.values((await store.read()).invitations));
+      if (req.method === 'GET') return send(res, 200, await store.list());
       if (req.method === 'POST') {
         const body = await readJson(req);
         if (typeof body.key !== 'string' || !KEY_RE.test(body.key)) throw httpError(400, 'Invalid key');
-        const inv = await store.mutate((db) => {
-          if (has(db.invitations, body.key)) throw httpError(409, 'Key already exists');
-          const created = {
-            key: body.key,
-            name: cleanName(body.name),
-            theme: cleanTheme(body.theme ?? 'blue'),
-            address: cleanAddress(body.address),
-            avatar: cleanAvatar(body.avatar),
-            content: cleanContent(body.content),
-            rsvp: { status: 'PENDING', updatedAt: '' },
-            createdAt: new Date().toISOString(),
-          };
-          if (!created.avatar) delete created.avatar;
-          db.invitations[created.key] = created;
-          return created;
-        });
-        return send(res, 201, inv);
+        const created = {
+          key: body.key,
+          name: cleanName(body.name),
+          theme: cleanTheme(body.theme ?? 'blue'),
+          address: cleanAddress(body.address),
+          avatar: cleanAvatar(body.avatar),
+          content: cleanContent(body.content),
+          rsvp: { status: 'PENDING', updatedAt: '' },
+          createdAt: new Date().toISOString(),
+        };
+        if (!created.avatar) delete created.avatar;
+        await store.insert(created);
+        return send(res, 201, created);
       }
     } else if (parts.length === 2) {
-      if (req.method === 'GET') return send(res, 200, existing(await store.read(), key));
+      if (req.method === 'GET') {
+        const inv = await store.get(key);
+        if (!inv) throw httpError(404, 'Not found');
+        return send(res, 200, inv);
+      }
       if (req.method === 'PUT') {
         const body = await readJson(req);
-        const next = await store.mutate((db) => {
-          const updated = {
-            ...existing(db, key),
-            name: cleanName(body.name),
-            theme: cleanTheme(body.theme),
-            address: cleanAddress(body.address),
-            avatar: cleanAvatar(body.avatar),
-            content: cleanContent(body.content),
-          };
+        const fields = {
+          name: cleanName(body.name),
+          theme: cleanTheme(body.theme),
+          address: cleanAddress(body.address),
+          avatar: cleanAvatar(body.avatar),
+          content: cleanContent(body.content),
+        };
+        const next = await store.update(key, (inv) => {
+          const updated = { ...inv, ...fields };
           if (!updated.avatar) delete updated.avatar;
-          db.invitations[key] = updated;
           return updated;
         });
         return send(res, 200, next);
       }
       if (req.method === 'DELETE') {
-        await store.mutate((db) => {
-          existing(db, key);
-          delete db.invitations[key];
-        });
+        await store.remove(key);
         return send(res, 204);
       }
     } else if (parts[2] === 'rsvp' && req.method === 'POST') {
       const body = await readJson(req);
       if (!STATUSES.includes(body.status)) throw httpError(400, 'Invalid status');
-      const inv = await store.mutate((db) => {
-        const target = existing(db, key);
-        target.rsvp = { status: body.status, updatedAt: new Date().toISOString() };
-        return target;
-      });
-      return send(res, 200, inv);
+      const rsvp = { status: body.status, updatedAt: new Date().toISOString() };
+      return send(res, 200, await store.update(key, (inv) => ({ ...inv, rsvp })));
     }
     throw httpError(405, 'Method not allowed');
   }

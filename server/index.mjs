@@ -1,15 +1,13 @@
-// Local server: the JSON API (data in one file) + the built Angular app. On Vercel the API runs
-// from api/[...path].mjs instead and the static files are served by Vercel.
+// Local server: the JSON API (MongoDB via InvitationService) + the built Angular app.
+// On Vercel the API runs from api/invitations/** instead and Vercel serves the static files.
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { dirname, extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createApi } from './api.mjs';
-import { blobStore, fileStore } from './stores.mjs';
+import { InvitationService } from './invitation.service.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-// Kept outside the project folder: ng serve watches the project and reloads the page on every save.
-const DATA_FILE = process.env.DATA_FILE ? resolve(process.env.DATA_FILE) : join(ROOT, '..', 'grad-invitation-data', 'data.json');
 const STATIC_DIR = join(ROOT, 'dist', 'grad-invitation', 'browser');
 const PORT = Number(process.env.PORT) || 3000;
 
@@ -65,7 +63,7 @@ async function serveStatic(res, pathname) {
   }
 }
 
-const api = createApi(process.env.BLOB_READ_WRITE_TOKEN ? blobStore() : fileStore(DATA_FILE));
+const api = createApi(InvitationService.fromEnv());
 
 createServer(async (req, res) => {
   try {
@@ -81,4 +79,4 @@ createServer(async (req, res) => {
     if (!res.headersSent) res.writeHead(500);
     res.end();
   }
-}).listen(PORT, () => console.log(`http://localhost:${PORT}  (data: ${DATA_FILE})`));
+}).listen(PORT, () => console.log('http://localhost:' + PORT));
