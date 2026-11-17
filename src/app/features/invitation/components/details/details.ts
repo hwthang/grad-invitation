@@ -8,53 +8,55 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
 
 const DEFAULT_DURATION_HOURS = 3;
 
-/** Ceremony details: date, time, place, map and calendar buttons. */
+/** Ceremony details (date, time, place, map and calendar buttons), meant to sit in a column. */
 @Component({
   selector: 'app-details',
   imports: [DatePipe, SectionHeading, AppButton, RevealDirective],
   template: `
-    <section appReveal class="bg-gradient-to-b from-soft to-ice px-4 py-20">
-      <div class="mx-auto max-w-4xl">
-        <div>
-          <div data-reveal>
-            <app-section-heading [heading]="event().heading" icon="fa-solid fa-calendar-days" />
-          </div>
-          <p data-reveal class="mt-6 text-center font-display text-xl text-navy">{{ info().event.title }}</p>
-
-          <div class="mt-8 grid gap-4 sm:grid-cols-3">
-            <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card">
-              <i class="fa-regular fa-calendar mb-3 text-2xl text-royal" aria-hidden="true"></i>
-              <p class="text-sm text-muted">{{ event().dateLabel }}</p>
-              <p class="mt-1 font-medium text-navy">{{ start() | date: 'dd/MM/yyyy' }}</p>
-            </div>
-            <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card">
-              <i class="fa-regular fa-clock mb-3 text-2xl text-royal" aria-hidden="true"></i>
-              <p class="text-sm text-muted">{{ event().timeLabel }}</p>
-              <p class="mt-1 font-medium text-navy">{{ info().event.startTime }}</p>
-            </div>
-            <div data-reveal class="rounded-3xl bg-white p-6 text-center shadow-card">
-              <i class="fa-solid fa-location-dot mb-3 text-2xl text-royal" aria-hidden="true"></i>
-              <p class="text-sm text-muted">{{ event().locationLabel }}</p>
-              <p class="mt-1 font-medium text-navy">{{ info().event.location }}</p>
-              <p class="mt-1 text-sm text-muted">{{ info().event.address }}</p>
-            </div>
-          </div>
-
-          <p data-reveal class="mx-auto mt-8 max-w-xl text-center text-lg text-muted">{{ event().invitationMessage }}</p>
-
-          <div data-reveal class="mx-auto mt-8 grid max-w-xl gap-3 sm:grid-cols-2">
-            <app-button [fullWidth]="true" [href]="info().event.mapUrl">
-              <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
-              {{ event().mapButtonLabel }}
-            </app-button>
-            <app-button variant="secondary" [fullWidth]="true" [href]="calendarUrl()">
-              <i class="fa-regular fa-calendar-plus" aria-hidden="true"></i>
-              {{ event().calendarButtonLabel }}
-            </app-button>
-          </div>
-        </div>
+    <div appReveal>
+      <div data-reveal>
+        <app-section-heading [heading]="event().heading" icon="fa-solid fa-calendar-days" />
       </div>
-    </section>
+      <p data-reveal class="mt-2 text-center font-display text-xl text-navy">{{ info().event.title }}</p>
+
+      <ul class="mt-8 space-y-3">
+        <li data-reveal class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+          <i class="fa-regular fa-calendar w-6 text-center text-xl text-royal" aria-hidden="true"></i>
+          <div>
+            <p class="text-sm text-muted">{{ event().dateLabel }}</p>
+            <p class="font-medium text-navy">{{ start() | date: 'dd/MM/yyyy' }}</p>
+          </div>
+        </li>
+        <li data-reveal class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+          <i class="fa-regular fa-clock w-6 text-center text-xl text-royal" aria-hidden="true"></i>
+          <div>
+            <p class="text-sm text-muted">{{ event().timeLabel }}</p>
+            <p class="font-medium text-navy">{{ info().event.startTime }}</p>
+          </div>
+        </li>
+        <li data-reveal class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+          <i class="fa-solid fa-location-dot w-6 text-center text-xl text-royal" aria-hidden="true"></i>
+          <div>
+            <p class="text-sm text-muted">{{ event().locationLabel }}</p>
+            <p class="font-medium text-navy">{{ info().event.location }}</p>
+            <p class="text-sm text-muted">{{ info().event.address }}</p>
+          </div>
+        </li>
+      </ul>
+
+      <p data-reveal class="mt-6 text-center text-muted">{{ event().invitationMessage }}</p>
+
+      <div data-reveal class="mt-6 grid gap-3 sm:grid-cols-2">
+        <app-button [fullWidth]="true" [href]="info().event.mapUrl">
+          <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+          {{ event().mapButtonLabel }}
+        </app-button>
+        <app-button variant="secondary" [fullWidth]="true" [href]="calendarUrl()">
+          <i class="fa-regular fa-calendar-plus" aria-hidden="true"></i>
+          {{ event().calendarButtonLabel }}
+        </app-button>
+      </div>
+    </div>
   `,
 })
 export class Details {

@@ -11,7 +11,6 @@ import { Loading } from '../../../../shared/components/loading/loading';
 import { Closing } from '../../components/closing/closing';
 import { Details } from '../../components/details/details';
 import { Envelope } from '../../components/envelope/envelope';
-import { GraduationGallery } from '../../components/graduation-gallery/graduation-gallery';
 import { Hero } from '../../components/hero/hero';
 import { Rsvp } from '../../components/rsvp/rsvp';
 
@@ -20,7 +19,7 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
 /** Public, read-only invitation for one guest: /invitations/:key */
 @Component({
   selector: 'app-invitation-page',
-  imports: [Hero, Details, GraduationGallery, Rsvp, Closing, Fireworks, Envelope, Loading],
+  imports: [Hero, Details, Rsvp, Closing, Fireworks, Envelope, Loading],
   template: `
     @let s = state();
     @switch (s.status) {
@@ -43,15 +42,20 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
           @if (revealed()) {
             <app-fireworks [colors]="colors[r.theme]" />
             <app-hero [content]="r.content.hero" [image]="r.avatar" [imageAlt]="r.invitation.name" [fallbackImage]="r.fallbackImage" />
-            <app-details [event]="r.content.event" [info]="r.info" />
-            <app-graduation-gallery [content]="r.content.gallery" [fallbackImage]="r.fallbackImage" />
-            <app-rsvp
-              [content]="r.content.rsvp"
-              [status]="status()"
-              [fireworkColors]="colors[r.theme]"
-              (responded)="respond(r.invitation.key, $event)"
-            />
-            <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
+            <section class="bg-gradient-to-b from-soft to-ice px-4 py-16 sm:py-20">
+              <div class="mx-auto grid max-w-5xl items-start gap-12 md:grid-cols-2 md:gap-10">
+                <app-details [event]="r.content.event" [info]="r.info" />
+                <div class="space-y-12">
+                  <app-rsvp
+                    [content]="r.content.rsvp"
+                    [status]="status()"
+                    [fireworkColors]="colors[r.theme]"
+                    (responded)="respond(r.invitation.key, $event)"
+                  />
+                  <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
+                </div>
+              </div>
+            </section>
           }
         </main>
       }

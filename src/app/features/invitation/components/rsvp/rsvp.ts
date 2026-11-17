@@ -39,16 +39,16 @@ const SPOTLIGHT_MS = 6000;
       ></div>
     }
 
-    <section appReveal class="bg-gradient-to-b from-ice to-soft px-4 py-20">
-      <div class="mx-auto max-w-3xl">
+    <div appReveal>
+      <div>
         <div data-reveal>
           <app-section-heading [heading]="content().heading" icon="fa-regular fa-envelope-open" />
         </div>
 
-        <div class="mt-10" aria-live="polite">
+        <div class="mt-8" aria-live="polite">
           @switch (status()) {
             @case ('PENDING') {
-              <div class="grid gap-4 sm:grid-cols-2">
+              <div class="grid gap-4">
                 <div data-reveal class="flex flex-col items-center rounded-3xl bg-white p-6 text-center shadow-card">
                   <i class="fa-regular fa-face-smile-beam mb-3 text-3xl text-royal" aria-hidden="true"></i>
                   <app-button class="w-full flex-1" [fullWidth]="true" (clicked)="respond('ATTENDING')">{{ content().attendingButton }}</app-button>
@@ -90,7 +90,7 @@ const SPOTLIGHT_MS = 6000;
           }
         </div>
       </div>
-    </section>
+    </div>
   `,
 })
 export class Rsvp {
