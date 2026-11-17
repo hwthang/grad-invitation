@@ -1,6 +1,7 @@
 // REST API for invitations, independent of where the data is stored (see stores.mjs).
 const KEY_RE = /^[a-z0-9][a-z0-9-]{0,59}$/;
 const THEMES = ['blue', 'pink'];
+const ADDRESSES = ['anh', 'chi', 'em', 'ban'];
 const STATUSES = ['PENDING', 'ATTENDING', 'NOT_ATTENDING'];
 const MAX_BODY = 4 * 1024 * 1024; // avatars are stored as small data URLs
 
@@ -56,6 +57,12 @@ function cleanTheme(v) {
   return v;
 }
 
+function cleanAddress(v) {
+  if (v === undefined || v === null) return 'ban';
+  if (!ADDRESSES.includes(v)) throw httpError(400, 'Invalid address');
+  return v;
+}
+
 function cleanAvatar(v) {
   if (v === undefined || v === null || v === '') return undefined;
   if (typeof v !== 'string' || v.length > 3_000_000 || !/^(data:image\/|\/|https?:\/\/)/.test(v)) {
@@ -94,6 +101,7 @@ export function createApi(store) {
             key: body.key,
             name: cleanName(body.name),
             theme: cleanTheme(body.theme ?? 'blue'),
+            address: cleanAddress(body.address),
             avatar: cleanAvatar(body.avatar),
             content: cleanContent(body.content),
             rsvp: { status: 'PENDING', updatedAt: '' },
@@ -114,6 +122,7 @@ export function createApi(store) {
             ...existing(db, key),
             name: cleanName(body.name),
             theme: cleanTheme(body.theme),
+            address: cleanAddress(body.address),
             avatar: cleanAvatar(body.avatar),
             content: cleanContent(body.content),
           };

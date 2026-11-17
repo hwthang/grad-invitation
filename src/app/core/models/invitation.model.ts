@@ -73,6 +73,9 @@ export type ResolvedInvitation = DeepRequired<InvitationContent>;
 /** Color theme of the invitation. */
 export type InvitationTheme = 'blue' | 'pink';
 
+/** How the graduate addresses the guest. */
+export type Address = 'anh' | 'chi' | 'em' | 'ban';
+
 export type RSVPStatus = 'PENDING' | 'ATTENDING' | 'NOT_ATTENDING';
 
 /** An invitation as stored in data.json. */
@@ -82,6 +85,8 @@ export interface Invitation {
   /** Guest name. */
   name: string;
   theme: InvitationTheme;
+  /** Form of address (xưng hô); defaults to 'ban'. */
+  address?: Address;
   /** Avatar image (URL or data URL). */
   avatar?: string;
   /** Text overrides on top of the default invitation. */

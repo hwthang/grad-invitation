@@ -1,10 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Invitation, InvitationTheme, RSVPStatus } from '../../core/models/invitation.model';
+import { Address, Invitation, InvitationTheme, RSVPStatus } from '../../core/models/invitation.model';
 import { AuthService } from '../../core/services/auth.service';
 import { InvitationApi } from '../../core/services/invitation-api.service';
 import { DEFAULT_AVATAR } from '../../core/services/invitation.service';
+import { ADDRESS_LABELS, ADDRESS_OPTIONS } from '../../core/config/default-invitation.config';
 import { themedAsset } from '../../core/config/theme-assets.config';
 import { STATUS_LABEL, downloadText, rsvpToCsv, rsvpToJson } from '../../core/utils/export-rsvp';
 import { KEY_PATTERN, slugify } from '../../core/utils/slugify';
@@ -45,7 +46,7 @@ import { Loading } from '../../shared/components/loading/loading';
         @if (showForm()) {
           <form [formGroup]="form" (ngSubmit)="create()" class="mt-6 rounded-3xl bg-white p-6 shadow-card" novalidate>
             <h2 class="font-display text-xl text-navy">Thiệp mới</h2>
-            <div class="mt-4 grid gap-4 sm:grid-cols-3">
+            <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <label for="new-name" class="mb-1 block text-sm font-medium text-navy">Tên khách</label>
                 <input id="new-name" formControlName="name" class="w-full rounded-2xl border border-pastel px-4 py-2.5 outline-none focus:border-royal" />
@@ -53,6 +54,14 @@ import { Loading } from '../../shared/components/loading/loading';
               <div>
                 <label for="new-key" class="mb-1 block text-sm font-medium text-navy">Key (đường dẫn)</label>
                 <input id="new-key" formControlName="key" placeholder="vd: nguyen-van-a" class="w-full rounded-2xl border border-pastel px-4 py-2.5 outline-none focus:border-royal" />
+              </div>
+              <div>
+                <label for="new-address" class="mb-1 block text-sm font-medium text-navy">Xưng hô</label>
+                <select id="new-address" formControlName="address" class="w-full rounded-2xl border border-pastel bg-white px-4 py-2.5 outline-none focus:border-royal">
+                  @for (a of addresses; track a) {
+                    <option [value]="a">{{ addressLabels[a] }}</option>
+                  }
+                </select>
               </div>
               <div>
                 <label for="new-theme" class="mb-1 block text-sm font-medium text-navy">Màu</label>
@@ -119,6 +128,8 @@ export class ConsolePage {
   private readonly router = inject(Router);
 
   protected readonly label = STATUS_LABEL;
+  protected readonly addresses = ADDRESS_OPTIONS;
+  protected readonly addressLabels = ADDRESS_LABELS;
   protected readonly items = signal<Invitation[] | null>(null);
   protected readonly loadError = signal(false);
   protected readonly showForm = signal(false);
@@ -129,6 +140,7 @@ export class ConsolePage {
     name: new FormControl('', { nonNullable: true }),
     key: new FormControl('', { nonNullable: true }),
     theme: new FormControl<InvitationTheme>('blue', { nonNullable: true }),
+    address: new FormControl<Address>('ban', { nonNullable: true }),
   });
 
   private readonly counts = computed(() => {
@@ -159,16 +171,16 @@ export class ConsolePage {
   protected toggleForm(): void {
     this.showForm.update((v) => !v);
     this.formError.set('');
-    this.form.reset({ name: '', key: '', theme: 'blue' });
+    this.form.reset({ name: '', key: '', theme: 'blue', address: 'ban' });
   }
 
   protected create(): void {
-    const { name, key, theme } = this.form.getRawValue();
+    const { name, key, theme, address } = this.form.getRawValue();
     if (!name.trim()) return this.formError.set('Vui lòng nhập tên khách.');
     if (!KEY_PATTERN.test(key)) return this.formError.set('Key chỉ gồm chữ thường không dấu, số và dấu gạch ngang.');
     if (this.items()?.some((i) => i.key === key)) return this.formError.set('Key này đã tồn tại.');
 
-    this.api.create(key, { name: name.trim(), theme }).subscribe({
+    this.api.create(key, { name: name.trim(), theme, address }).subscribe({
       next: (inv) => {
         this.items.update((list) => [...(list ?? []), inv]);
         this.showForm.set(false);

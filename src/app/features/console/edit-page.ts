@@ -1,9 +1,9 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { defaultInvitation } from '../../core/config/default-invitation.config';
+import { ADDRESS_LABELS, ADDRESS_OPTIONS, defaultInvitationFor } from '../../core/config/default-invitation.config';
 import { themedAsset } from '../../core/config/theme-assets.config';
-import { InvitationContent, InvitationTheme } from '../../core/models/invitation.model';
+import { Address, InvitationContent, InvitationTheme } from '../../core/models/invitation.model';
 import { InvitationApi } from '../../core/services/invitation-api.service';
 import { DEFAULT_AVATAR } from '../../core/services/invitation.service';
 import { fileToAvatar } from '../../core/utils/resize-image';
@@ -106,10 +106,18 @@ const setPath = (obj: Record<string, unknown>, path: string, value: string): voi
                   }
                 </div>
               </div>
-              <div class="mt-5 grid gap-4 sm:grid-cols-2">
+              <div class="mt-5 grid gap-4 sm:grid-cols-3">
                 <div>
                   <label for="f-name" class="mb-1 block text-sm font-medium text-navy">Tên khách</label>
                   <input id="f-name" formControlName="name" class="w-full rounded-2xl border border-pastel px-4 py-2.5 outline-none focus:border-royal" />
+                </div>
+                <div>
+                  <label for="f-address" class="mb-1 block text-sm font-medium text-navy">Xưng hô</label>
+                  <select id="f-address" formControlName="address" class="w-full rounded-2xl border border-pastel bg-white px-4 py-2.5 outline-none focus:border-royal">
+                    @for (a of addresses; track a) {
+                      <option [value]="a">{{ addressLabels[a] }}</option>
+                    }
+                  </select>
                 </div>
                 <div>
                   <label for="f-theme" class="mb-1 block text-sm font-medium text-navy">Màu</label>
@@ -161,6 +169,8 @@ export class EditPage {
   private readonly router = inject(Router);
 
   protected readonly groups = GROUPS;
+  protected readonly addresses = ADDRESS_OPTIONS;
+  protected readonly addressLabels = ADDRESS_LABELS;
   protected readonly loaded = signal(false);
   protected readonly missing = signal(false);
   protected readonly avatar = signal('');
@@ -173,6 +183,7 @@ export class EditPage {
   protected readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true }),
     theme: new FormControl<InvitationTheme>('blue', { nonNullable: true }),
+    address: new FormControl<Address>('ban', { nonNullable: true }),
     content: new FormGroup(this.contentControls),
   });
 
@@ -185,7 +196,7 @@ export class EditPage {
   }
 
   protected placeholder(path: string): string {
-    return getPath(defaultInvitation, path) ?? '';
+    return getPath(defaultInvitationFor(this.form.controls.address.value), path) ?? '';
   }
 
   private load(): void {
@@ -193,6 +204,7 @@ export class EditPage {
       next: (inv) => {
         this.form.controls.name.setValue(inv.name);
         this.form.controls.theme.setValue(inv.theme);
+        this.form.controls.address.setValue(inv.address ?? 'ban');
         this.avatar.set(inv.avatar ?? '');
         for (const [path, control] of Object.entries(this.contentControls)) {
           control.setValue(getPath(inv.content, path) ?? '');
@@ -231,6 +243,7 @@ export class EditPage {
       .update(this.key(), {
         name,
         theme: this.form.controls.theme.value,
+        address: this.form.controls.address.value,
         avatar: this.avatar() || undefined,
         content: content as InvitationContent,
       })

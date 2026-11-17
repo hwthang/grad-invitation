@@ -60,6 +60,15 @@ describe('InvitationService', () => {
     expect(content.gallery.images).toEqual([]);
   });
 
+  it('words the default text for the chosen form of address', () => {
+    expect(service.resolve(invitation()).content.hero.greeting).toBe('Thân gửi bạn,');
+    const anh = service.resolve(invitation({ address: 'anh' })).content;
+    expect(anh.hero.greeting).toBe('Thân gửi anh,');
+    expect(anh.hero.message).toBe('Em trân trọng mời anh đến dự lễ tốt nghiệp của em.');
+    expect(anh.rsvp.attendingButton).toBe('Anh sẽ đến!');
+    expect(service.resolve(invitation({ address: 'em' })).content.hero.message).toContain('Anh trân trọng mời em');
+  });
+
   it('uses the guest avatar, else the themed placeholder', () => {
     expect(service.resolve(invitation({ avatar: 'data:image/jpeg;base64,xx' })).avatar).toBe('data:image/jpeg;base64,xx');
     expect(service.resolve(invitation()).avatar).toBe('/assets/images/default-guest.svg');

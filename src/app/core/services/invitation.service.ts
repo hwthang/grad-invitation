@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { defaultInvitation } from '../config/default-invitation.config';
+import { defaultInvitationFor } from '../config/default-invitation.config';
 import { graduationInfo } from '../config/graduation-info.config';
 import { themedAsset } from '../config/theme-assets.config';
 import { GraduationInfo } from '../models/graduation-info.model';
@@ -27,7 +27,7 @@ export class InvitationService {
     const fallbackImage = themedAsset(DEFAULT_AVATAR, theme);
     return {
       invitation,
-      content: deepMerge(defaultInvitation, invitation.content ?? {}),
+      content: deepMerge(defaultInvitationFor(invitation.address), invitation.content ?? {}),
       avatar: invitation.avatar || fallbackImage,
       theme,
       fallbackImage,

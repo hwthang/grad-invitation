@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Invitation, InvitationContent, InvitationTheme, RSVPStatus } from '../models/invitation.model';
+import { Address, Invitation, InvitationContent, InvitationTheme, RSVPStatus } from '../models/invitation.model';
 
 export interface InvitationInput {
   name: string;
   theme: InvitationTheme;
+  address: Address;
   avatar?: string;
   content: InvitationContent;
 }
@@ -25,7 +26,7 @@ export class InvitationApi {
   }
 
   create(key: string, input: Partial<InvitationInput> & { name: string }): Observable<Invitation> {
-    return this.http.post<Invitation>(this.base, { key, theme: 'blue', content: {}, ...input });
+    return this.http.post<Invitation>(this.base, { key, theme: 'blue', address: 'ban', content: {}, ...input });
   }
 
   update(key: string, input: InvitationInput): Observable<Invitation> {
