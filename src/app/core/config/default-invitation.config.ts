@@ -43,7 +43,7 @@ export const defaultInvitation: ResolvedInvitation = {
 
   closing: {
     heading: 'Cảm ơn bạn!',
-    message: 'Hy vọng chúng ta sẽ có thêm một kỷ niệm đẹp cùng nhau.',
+    message: 'Mãi bên nhau bạn nhó',
     signature: 'Thân mến,',
   },
 };
