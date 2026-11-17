@@ -43,7 +43,7 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
           @if (revealed()) {
             <app-fireworks [colors]="colors[r.theme]" />
             <app-hero [content]="r.content.hero" [image]="r.avatar" [imageAlt]="r.invitation.name" [fallbackImage]="r.fallbackImage" />
-            <app-details [profile]="r.content.profile" [event]="r.content.event" [info]="r.info" />
+            <app-details [event]="r.content.event" [info]="r.info" />
             <app-graduation-gallery [content]="r.content.gallery" [fallbackImage]="r.fallbackImage" />
             <app-rsvp
               [content]="r.content.rsvp"

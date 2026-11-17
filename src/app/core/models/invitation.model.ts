@@ -12,15 +12,6 @@ export interface InvitationContent {
     image?: string;
   };
 
-  profile?: {
-    heading?: string;
-    personalMessage?: string;
-    quote?: string;
-    universityLabel?: string;
-    majorLabel?: string;
-    yearLabel?: string;
-  };
-
   event?: {
     heading?: string;
     invitationMessage?: string;

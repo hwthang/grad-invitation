@@ -6,14 +6,6 @@ export const defaultInvitation: ResolvedInvitation = {
     message: 'Mình trân trọng mời bạn đến dự lễ tốt nghiệp của mình.',
   },
 
-  profile: {
-    heading: 'Một dấu mốc',
-    personalMessage: 'Mỗi bước đi đều có một phần của bạn.',
-    universityLabel: 'Trường',
-    majorLabel: 'Ngành học',
-    yearLabel: 'Năm tốt nghiệp',
-  },
-
   event: {
     heading: 'Thông tin buổi lễ',
     invitationMessage: 'Sự có mặt của bạn là niềm vui của mình.',

@@ -33,9 +33,6 @@ const GROUPS: FieldGroup[] = [
   {
     title: 'Thông tin buổi lễ',
     fields: [
-      { path: 'profile.heading', label: 'Tiêu đề' },
-      { path: 'profile.personalMessage', label: 'Lời nhắn riêng' },
-      { path: 'profile.quote', label: 'Trích dẫn (tuỳ chọn)' },
       { path: 'event.invitationMessage', label: 'Lời mời tham dự' },
     ],
   },

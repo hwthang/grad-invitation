@@ -8,41 +8,14 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
 
 const DEFAULT_DURATION_HOURS = 3;
 
-/** Graduate summary + ceremony details in a single section. */
+/** Ceremony details: date, time, place, map and calendar buttons. */
 @Component({
   selector: 'app-details',
   imports: [DatePipe, SectionHeading, AppButton, RevealDirective],
   template: `
-    <section appReveal class="bg-gradient-to-b from-white to-soft px-4 py-20">
+    <section appReveal class="bg-gradient-to-b from-soft to-ice px-4 py-20">
       <div class="mx-auto max-w-4xl">
-        <div data-reveal>
-          <app-section-heading [heading]="profile().heading" icon="fa-solid fa-user-graduate" />
-        </div>
-
-        <p data-reveal class="mt-8 text-center font-display text-2xl text-navy">{{ profile().personalMessage }}</p>
-        @if (profile().quote) {
-          <blockquote data-reveal class="mx-auto mt-4 max-w-xl border-l-4 border-sky pl-4 italic text-muted">{{ profile().quote }}</blockquote>
-        }
-
-        <dl class="mt-10 grid gap-3 sm:grid-cols-3">
-          <div data-reveal class="rounded-2xl bg-white p-4 text-center shadow-card">
-            <i class="fa-solid fa-building-columns mb-2 text-royal" aria-hidden="true"></i>
-            <dt class="text-sm text-muted">{{ profile().universityLabel }}</dt>
-            <dd class="font-medium text-navy">{{ info().university }}</dd>
-          </div>
-          <div data-reveal class="rounded-2xl bg-white p-4 text-center shadow-card">
-            <i class="fa-solid fa-book-open mb-2 text-royal" aria-hidden="true"></i>
-            <dt class="text-sm text-muted">{{ profile().majorLabel }}</dt>
-            <dd class="font-medium text-navy">{{ info().major }}</dd>
-          </div>
-          <div data-reveal class="rounded-2xl bg-white p-4 text-center shadow-card">
-            <i class="fa-solid fa-award mb-2 text-royal" aria-hidden="true"></i>
-            <dt class="text-sm text-muted">{{ profile().yearLabel }}</dt>
-            <dd class="font-medium text-navy">{{ info().graduationYear }}</dd>
-          </div>
-        </dl>
-
-        <div class="mt-16">
+        <div>
           <div data-reveal>
             <app-section-heading [heading]="event().heading" icon="fa-solid fa-calendar-days" />
           </div>
@@ -85,7 +58,6 @@ const DEFAULT_DURATION_HOURS = 3;
   `,
 })
 export class Details {
-  readonly profile = input.required<ResolvedInvitation['profile']>();
   readonly event = input.required<ResolvedInvitation['event']>();
   readonly info = input.required<GraduationInfo>();
 
