@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, of, startWith, switchMap } from 'rxjs';
@@ -14,7 +15,7 @@ import { Envelope } from '../../components/envelope/envelope';
 import { Hero } from '../../components/hero/hero';
 import { Rsvp } from '../../components/rsvp/rsvp';
 
-type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'ready'; invitation: Invitation };
+type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'error'; code: number } | { status: 'ready'; invitation: Invitation };
 
 /** Public, read-only invitation for one guest: /invitations/:key */
 @Component({
@@ -31,6 +32,14 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
           <div role="alert" class="max-w-sm rounded-3xl bg-white p-8 text-center shadow-card">
             <i class="fa-solid fa-envelope mb-3 text-3xl text-sky" aria-hidden="true"></i>
             <p class="text-muted">Không tìm thấy thiệp mời này. Vui lòng kiểm tra lại đường dẫn.</p>
+          </div>
+        </main>
+      }
+      @case ('error') {
+        <main class="flex min-h-screen items-center justify-center bg-soft px-4">
+          <div role="alert" class="max-w-sm rounded-3xl bg-white p-8 text-center shadow-card">
+            <i class="fa-solid fa-triangle-exclamation mb-3 text-3xl text-sky" aria-hidden="true"></i>
+            <p class="text-muted">Không tải được thiệp (lỗi {{ s.code || 'mạng' }}). Vui lòng tải lại trang.</p>
           </div>
         </main>
       }
@@ -78,7 +87,10 @@ export class InvitationPage {
       switchMap((key) =>
         this.api.get(key).pipe(
           map((invitation): LoadState => ({ status: 'ready', invitation })),
-          catchError(() => of<LoadState>({ status: 'missing' })),
+          catchError((e: unknown) => {
+            const code = e instanceof HttpErrorResponse ? e.status : 0;
+            return of<LoadState>(code === 404 ? { status: 'missing' } : { status: 'error', code });
+          }),
           startWith<LoadState>({ status: 'loading' }),
         ),
       ),
