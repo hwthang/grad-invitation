@@ -36,7 +36,7 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
             <span class="font-display text-xl text-navy">Lễ Tốt Nghiệp</span>
           </span>
           <!-- front of the envelope; hides the card until it flies up -->
-          <span data-env-body class="absolute inset-0 rounded-2xl bg-sky"></span>
+          <span data-env-body data-env-front class="absolute inset-0 rounded-2xl bg-sky"></span>
           <!-- triangle at the bottom: folds down out of the way when opened -->
           <span
             data-env-body
@@ -127,12 +127,14 @@ export class Envelope {
       .to(q('[data-env-seal]'), { scale: 1.2, duration: 0.18, ease: 'power1.out' }, 0)
       .to(q('[data-env-seal]'), { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(2)' }, 0.18)
       .to(btn, { y: 0, duration: 0.4 }, 0)
-      // The triangle at the bottom folds forward and down, clearing the way.
+      // The triangle at the bottom folds forward and down.
       .to(flap, { rotationX: -180, duration: 0.8 }, 0.3)
-      // The card flies up out of the envelope.
-      .to(card, { yPercent: -120, scale: 1.1, duration: 1.1, ease: 'power3.out' }, 0.75)
-      .to(el.querySelectorAll('[data-env-body]'), { y: 50, opacity: 0, duration: 0.7 }, 1.15)
-      .add(() => this.opened.emit(), 1.7)
-      .to(el, { opacity: 0, duration: 0.9, ease: 'power1.inOut', onComplete: finish }, 1.7);
+      // The card layer comes above the envelope front and the triangle, then flies up.
+      .set(card, { zIndex: 20 }, 0.65)
+      .to(q('[data-env-front]'), { opacity: 0, duration: 0.3 }, 0.65)
+      .to(card, { yPercent: -120, scale: 1.1, duration: 1.1, ease: 'power3.out' }, 0.85)
+      .to(el.querySelectorAll('[data-env-body]'), { y: 50, opacity: 0, duration: 0.7 }, 1.3)
+      .add(() => this.opened.emit(), 1.85)
+      .to(el, { opacity: 0, duration: 0.9, ease: 'power1.inOut', onComplete: finish }, 1.85);
   }
 }
