@@ -35,7 +35,6 @@ const GROUPS: FieldGroup[] = [
     title: 'Thông tin buổi lễ',
     fields: [
       { path: 'profile.heading', label: 'Tiêu đề' },
-      { path: 'profile.description', label: 'Mô tả', multiline: true },
       { path: 'profile.personalMessage', label: 'Lời nhắn riêng' },
       { path: 'profile.quote', label: 'Trích dẫn (tuỳ chọn)' },
       { path: 'event.subtitle', label: 'Dòng phụ phần lễ' },
@@ -48,9 +47,7 @@ const GROUPS: FieldGroup[] = [
       { path: 'rsvp.heading', label: 'Tiêu đề' },
       { path: 'rsvp.subtitle', label: 'Mô tả', multiline: true },
       { path: 'rsvp.attendingButton', label: 'Nút tham gia' },
-      { path: 'rsvp.attendingDescription', label: 'Mô tả nút tham gia' },
       { path: 'rsvp.decliningButton', label: 'Nút từ chối' },
-      { path: 'rsvp.decliningDescription', label: 'Mô tả nút từ chối' },
       { path: 'rsvp.attendingConfirmation.title', label: 'Cảm ơn (tham gia) - tiêu đề' },
       { path: 'rsvp.attendingConfirmation.message', label: 'Cảm ơn (tham gia) - nội dung', multiline: true },
       { path: 'rsvp.decliningConfirmation.title', label: 'Cảm ơn (từ chối) - tiêu đề' },

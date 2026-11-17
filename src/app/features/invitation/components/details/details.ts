@@ -16,7 +16,7 @@ const DEFAULT_DURATION_HOURS = 3;
     <section appReveal class="bg-gradient-to-b from-white to-soft px-4 py-20">
       <div class="mx-auto max-w-4xl">
         <div data-reveal>
-          <app-section-heading [heading]="profile().heading" [description]="profile().description" icon="fa-solid fa-user-graduate" />
+          <app-section-heading [heading]="profile().heading" icon="fa-solid fa-user-graduate" />
         </div>
 
         <p data-reveal class="mt-8 text-center font-display text-2xl text-navy">{{ profile().personalMessage }}</p>

@@ -15,7 +15,6 @@ export interface InvitationContent {
 
   profile?: {
     heading?: string;
-    description?: string;
     personalMessage?: string;
     quote?: string;
     universityLabel?: string;
@@ -36,7 +35,6 @@ export interface InvitationContent {
 
   gallery?: {
     heading?: string;
-    description?: string;
     images?: GalleryImage[];
     closeLabel?: string;
     previousLabel?: string;
@@ -47,9 +45,7 @@ export interface InvitationContent {
     heading?: string;
     subtitle?: string;
     attendingButton?: string;
-    attendingDescription?: string;
     decliningButton?: string;
-    decliningDescription?: string;
     changeButton?: string;
 
     attendingConfirmation?: {

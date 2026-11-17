@@ -13,7 +13,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
       <section appReveal class="bg-white px-4 py-20">
         <div class="mx-auto max-w-5xl">
           <div data-reveal>
-            <app-section-heading [heading]="content().heading" [description]="content().description" icon="fa-solid fa-camera-retro" />
+            <app-section-heading [heading]="content().heading" icon="fa-solid fa-camera-retro" />
           </div>
 
           <ul class="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">

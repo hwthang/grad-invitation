@@ -9,7 +9,6 @@ export const defaultInvitation: ResolvedInvitation = {
 
   profile: {
     heading: 'Một dấu mốc',
-    description: 'Cảm ơn bạn đã đồng hành cùng mình.',
     personalMessage: 'Mỗi bước đi đều có một phần của bạn.',
     universityLabel: 'Trường',
     majorLabel: 'Ngành học',
@@ -29,7 +28,6 @@ export const defaultInvitation: ResolvedInvitation = {
 
   gallery: {
     heading: 'Khoảnh khắc đáng nhớ',
-    description: '',
     closeLabel: 'Đóng',
     previousLabel: 'Ảnh trước',
     nextLabel: 'Ảnh sau',
@@ -41,9 +39,7 @@ export const defaultInvitation: ResolvedInvitation = {
     heading: 'Bạn sẽ đến chứ?',
     subtitle: 'Cảm ơn bạn đã ghé qua lời mời này!',
     attendingButton: 'Mình sẽ đến!',
-    attendingDescription: 'Hẹn gặp bạn!',
     decliningButton: 'Mình không đến được',
-    decliningDescription: 'Gửi bạn lời chúc nhé!',
     changeButton: 'Đổi câu trả lời',
     attendingConfirmation: {
       title: 'Tuyệt vời! 🎉',
