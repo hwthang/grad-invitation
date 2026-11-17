@@ -14,7 +14,7 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
         role="dialog"
         aria-modal="true"
         aria-label="Mở thiệp"
-        class="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-pastel/70 via-ice to-soft px-4"
+        class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-gradient-to-b from-pastel/70 via-ice to-soft px-4"
       >
         <button
           #btn
@@ -28,7 +28,6 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
           <i class="fa-solid fa-envelope" aria-hidden="true"></i>
         </button>
 
-        <p class="text-sm tracking-wide text-muted">Chạm để mở thiệp</p>
       </div>
     }
   `,
