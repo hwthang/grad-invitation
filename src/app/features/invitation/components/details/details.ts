@@ -19,22 +19,22 @@ const DEFAULT_DURATION_HOURS = 3;
       </div>
       <p data-reveal class="mt-2 text-center font-display text-xl text-navy">{{ info().event.title }}</p>
 
-      <ul class="mt-8 space-y-3">
-        <li data-reveal class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+      <ul class="mt-8 grid grid-cols-2 gap-3">
+        <li data-reveal class="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-card">
           <i class="fa-regular fa-calendar w-6 text-center text-xl text-royal" aria-hidden="true"></i>
           <div>
             <p class="text-sm text-muted">{{ event().dateLabel }}</p>
             <p class="font-medium text-navy">{{ start() | date: 'dd/MM/yyyy' }}</p>
           </div>
         </li>
-        <li data-reveal class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+        <li data-reveal class="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-card">
           <i class="fa-regular fa-clock w-6 text-center text-xl text-royal" aria-hidden="true"></i>
           <div>
             <p class="text-sm text-muted">{{ event().timeLabel }}</p>
             <p class="font-medium text-navy">{{ info().event.startTime }}</p>
           </div>
         </li>
-        <li data-reveal class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card">
+        <li data-reveal class="col-span-2 flex items-center gap-3 rounded-2xl bg-white p-4 shadow-card">
           <i class="fa-solid fa-location-dot w-6 text-center text-xl text-royal" aria-hidden="true"></i>
           <div>
             <p class="text-sm text-muted">{{ event().locationLabel }}</p>

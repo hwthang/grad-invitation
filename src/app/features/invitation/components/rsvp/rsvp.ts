@@ -48,7 +48,7 @@ const SPOTLIGHT_MS = 6000;
         <div class="mt-8" aria-live="polite">
           @switch (status()) {
             @case ('PENDING') {
-              <div data-reveal class="flex flex-col gap-3">
+              <div data-reveal class="grid grid-cols-2 gap-3">
                 <app-button [fullWidth]="true" (clicked)="respond('ATTENDING')">
                   <i class="fa-regular fa-face-smile-beam" aria-hidden="true"></i>
                   {{ content().attendingButton }}
