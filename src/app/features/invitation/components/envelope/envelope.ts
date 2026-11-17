@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, afterNextRender, inject, input, output, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, afterNextRender, inject, output, signal, viewChild } from '@angular/core';
 import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/animation';
 
 /**
@@ -14,10 +14,8 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
         role="dialog"
         aria-modal="true"
         aria-label="Mở thiệp"
-        class="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8 bg-gradient-to-b from-pastel/70 via-ice to-soft px-4"
+        class="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-pastel/70 via-ice to-soft px-4"
       >
-        <p class="text-center font-display text-2xl italic text-royal sm:text-3xl">Thiệp mời dành cho {{ guestName() }}</p>
-
         <button
           #btn
           type="button"
@@ -36,7 +34,6 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
   `,
 })
 export class Envelope {
-  readonly guestName = input.required<string>();
   /** Fires when the overlay starts fading out. */
   readonly opened = output<void>();
 

@@ -37,7 +37,7 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
       @case ('ready') {
         @let r = resolved()!;
         <main [attr.data-theme]="r.theme" class="min-h-screen bg-offwhite">
-          <app-envelope [guestName]="r.invitation.name" (opened)="reveal()" />
+          <app-envelope (opened)="reveal()" />
 
           @if (revealed()) {
             <app-fireworks [colors]="colors[r.theme]" />
