@@ -8,13 +8,12 @@ import {
   computed,
   inject,
   input,
+  output,
   signal,
   untracked,
   viewChild,
 } from '@angular/core';
-import { RSVPStatus } from '../../../../core/models/rsvp.model';
-import { ResolvedInvitation } from '../../../../core/models/invitation.model';
-import { RsvpService } from '../../../../core/services/rsvp.service';
+import { RSVPStatus, ResolvedInvitation } from '../../../../core/models/invitation.model';
 import { gsap, prefersReducedMotion } from '../../../../shared/animation';
 import { AppButton } from '../../../../shared/components/button/button';
 import { Fireworks } from '../../../../shared/components/fireworks/fireworks';
@@ -98,11 +97,10 @@ const SPOTLIGHT_MS = 6000;
 })
 export class Rsvp {
   readonly content = input.required<ResolvedInvitation['rsvp']>();
-  readonly guestId = input.required<string>();
-  readonly guestName = input.required<string>();
+  readonly status = input.required<RSVPStatus>();
+  readonly responded = output<RSVPStatus>();
   readonly fireworkColors = input.required<readonly string[]>();
 
-  private readonly rsvp = inject(RsvpService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
   private readonly fireworks = viewChild.required<Fireworks>('fireworks');
@@ -110,8 +108,6 @@ export class Rsvp {
 
   /** True while the dark blur is shown after the visitor confirms attendance. */
   protected readonly spotlight = signal(false);
-
-  protected readonly status = computed(() => this.rsvp.getStatus(this.guestId()));
 
   protected readonly confirmation = computed(() => {
     const c = this.content();
@@ -148,7 +144,7 @@ export class Rsvp {
   }
 
   protected respond(status: RSVPStatus): void {
-    this.rsvp.save(this.guestId(), this.guestName(), status);
+    this.responded.emit(status);
     if (status === 'ATTENDING') this.celebrate();
     else this.dismissSpotlight(false);
   }

@@ -1,42 +1,103 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { catchError, map, of, startWith, switchMap } from 'rxjs';
 import { FIREWORK_COLORS } from '../../../../core/config/theme-assets.config';
+import { Invitation, RSVPStatus } from '../../../../core/models/invitation.model';
+import { InvitationApi } from '../../../../core/services/invitation-api.service';
 import { InvitationService } from '../../../../core/services/invitation.service';
 import { Fireworks } from '../../../../shared/components/fireworks/fireworks';
+import { Loading } from '../../../../shared/components/loading/loading';
 import { Closing } from '../../components/closing/closing';
-import { EventDetails } from '../../components/event-details/event-details';
-import { GraduateProfile } from '../../components/graduate-profile/graduate-profile';
+import { Details } from '../../components/details/details';
+import { Envelope } from '../../components/envelope/envelope';
 import { GraduationGallery } from '../../components/graduation-gallery/graduation-gallery';
 import { Hero } from '../../components/hero/hero';
 import { Rsvp } from '../../components/rsvp/rsvp';
 
+type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'ready'; invitation: Invitation };
+
+/** Public, read-only invitation for one guest: /invitations/:key */
 @Component({
   selector: 'app-invitation-page',
-  imports: [Hero, GraduateProfile, EventDetails, GraduationGallery, Rsvp, Closing, Fireworks],
+  imports: [Hero, Details, GraduationGallery, Rsvp, Closing, Fireworks, Envelope, Loading],
   template: `
-    @let r = resolved();
-    <main [attr.data-theme]="r.theme">
-      <app-fireworks [colors]="fireworkColors()" />
-      <app-hero [content]="r.content.hero" [image]="r.image" [imageAlt]="r.guest.name" [fallbackImage]="r.fallbackImage" />
-      <app-graduate-profile [content]="r.content.profile" [info]="r.info" [portrait]="r.portrait" [fallbackImage]="r.fallbackImage" />
-      <app-event-details [content]="r.content.event" [info]="r.info" />
-      <app-graduation-gallery [content]="r.content.gallery" [fallbackImage]="r.fallbackImage" />
-      <app-rsvp [content]="r.content.rsvp" [guestId]="r.guest.id" [guestName]="r.guest.name" [fireworkColors]="fireworkColors()" />
-      <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
-    </main>
+    @let s = state();
+    @switch (s.status) {
+      @case ('loading') {
+        <div class="flex min-h-screen items-center justify-center bg-soft"><app-loading /></div>
+      }
+      @case ('missing') {
+        <main class="flex min-h-screen items-center justify-center bg-soft px-4">
+          <div role="alert" class="max-w-sm rounded-3xl bg-white p-8 text-center shadow-card">
+            <i class="fa-solid fa-envelope mb-3 text-3xl text-sky" aria-hidden="true"></i>
+            <p class="text-muted">Không tìm thấy thiệp mời này. Vui lòng kiểm tra lại đường dẫn.</p>
+          </div>
+        </main>
+      }
+      @case ('ready') {
+        @let r = resolve(s.invitation);
+        <main [attr.data-theme]="r.theme" class="min-h-screen bg-offwhite">
+          <app-envelope [guestName]="r.invitation.name" (opened)="reveal()" />
+
+          @if (revealed()) {
+            <app-fireworks [colors]="colors[r.theme]" />
+            <app-hero [content]="r.content.hero" [image]="r.avatar" [imageAlt]="r.invitation.name" [fallbackImage]="r.fallbackImage" />
+            <app-details [profile]="r.content.profile" [event]="r.content.event" [info]="r.info" />
+            <app-graduation-gallery [content]="r.content.gallery" [fallbackImage]="r.fallbackImage" />
+            <app-rsvp
+              [content]="r.content.rsvp"
+              [status]="status()"
+              [fireworkColors]="colors[r.theme]"
+              (responded)="respond(r.invitation.key, $event)"
+            />
+            <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
+          }
+        </main>
+      }
+    }
   `,
 })
 export class InvitationPage {
+  private readonly api = inject(InvitationApi);
   private readonly invitations = inject(InvitationService);
 
-  private readonly guestId = toSignal(
-    inject(ActivatedRoute).queryParamMap.pipe(map((p) => p.get('guest'))),
-    { initialValue: null },
+  protected readonly colors = FIREWORK_COLORS;
+  protected readonly revealed = signal(false);
+  private readonly localStatus = signal<RSVPStatus | null>(null);
+
+  protected readonly state = toSignal(
+    inject(ActivatedRoute).paramMap.pipe(
+      map((p) => p.get('key') ?? ''),
+      switchMap((key) =>
+        this.api.get(key).pipe(
+          map((invitation): LoadState => ({ status: 'ready', invitation })),
+          catchError(() => of<LoadState>({ status: 'missing' })),
+          startWith<LoadState>({ status: 'loading' }),
+        ),
+      ),
+    ),
+    { initialValue: { status: 'loading' } as LoadState },
   );
 
-  /** Re-resolved whenever the `guest` query param changes; invalid ids fall back to the default guest. */
-  protected readonly resolved = computed(() => this.invitations.resolve(this.guestId()));
-  protected readonly fireworkColors = computed(() => FIREWORK_COLORS[this.resolved().theme]);
+  protected readonly status = computed<RSVPStatus>(() => {
+    const s = this.state();
+    return this.localStatus() ?? (s.status === 'ready' ? s.invitation.rsvp.status : 'PENDING');
+  });
+
+  protected resolve(invitation: Invitation) {
+    return this.invitations.resolve(invitation);
+  }
+
+  protected reveal(): void {
+    this.revealed.set(true);
+  }
+
+  protected respond(key: string, status: RSVPStatus): void {
+    const previous = this.localStatus();
+    this.localStatus.set(status); // optimistic
+    this.api.respond(key, status).subscribe({
+      error: () => this.localStatus.set(previous), // roll back so the guest can retry
+    });
+  }
 }

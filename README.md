@@ -2,6 +2,28 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.6.
 
+## Routes
+
+| URL | Purpose |
+| --- | --- |
+| `/` | Admin login (front-end only check) |
+| `/console` | List / create invitations, export RSVP CSV |
+| `/console/edit/:key` | Edit one invitation |
+| `/invitations/:key` | Public invitation (envelope intro, RSVP) |
+
+## Data & running
+
+All data lives in one file, `data/data.json` (git-ignored), read and written by `server/index.mjs`.
+
+```bash
+npm run api    # API on :3000
+npm run dev    # Angular dev server on :4200, proxies /api to :3000
+npm run serve  # production: build + serve app and API on :3000
+```
+
+> The admin login is checked in the browser only and the API has no auth, so anyone who knows the
+> URLs can call it. Treat this as a hobby setup, not a secured one.
+
 ## Development server
 
 To start a local development server, run:

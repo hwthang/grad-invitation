@@ -1,4 +1,4 @@
-import { GuestTheme } from '../models/guest.model';
+import { InvitationTheme as GuestTheme } from '../models/invitation.model';
 
 /**
  * Placeholder images are plain <img> files and cannot read CSS variables, so each themed

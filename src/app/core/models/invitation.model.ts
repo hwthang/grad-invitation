@@ -84,3 +84,23 @@ type DeepRequired<T> = T extends readonly unknown[]
 
 /** A complete invitation: the default content merged with guest overrides. */
 export type ResolvedInvitation = DeepRequired<InvitationContent>;
+
+/** Color theme of the invitation. */
+export type InvitationTheme = 'blue' | 'pink';
+
+export type RSVPStatus = 'PENDING' | 'ATTENDING' | 'NOT_ATTENDING';
+
+/** An invitation as stored in data.json. */
+export interface Invitation {
+  /** URL key: /invitations/:key */
+  key: string;
+  /** Guest name. */
+  name: string;
+  theme: InvitationTheme;
+  /** Avatar image (URL or data URL). */
+  avatar?: string;
+  /** Text overrides on top of the default invitation. */
+  content: InvitationContent;
+  rsvp: { status: RSVPStatus; updatedAt: string };
+  createdAt?: string;
+}

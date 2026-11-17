@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "api": "node server/index.mjs",
+    "dev": "ng serve",
+    "serve": "npm run build && node server/index.mjs"
   },
   "private": true,
   "packageManager": "npm@11.20.0",
