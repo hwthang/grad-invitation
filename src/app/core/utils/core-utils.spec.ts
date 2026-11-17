@@ -4,6 +4,7 @@ import { Invitation } from '../models/invitation.model';
 import { InvitationService } from '../services/invitation.service';
 import { deepMerge } from './deep-merge';
 import { rsvpToCsv } from './export-rsvp';
+import { formatVnTime } from './format-time';
 import { normalizeName } from './normalize-name';
 import { KEY_PATTERN, slugify } from './slugify';
 
@@ -88,5 +89,15 @@ describe('rsvpToCsv', () => {
     expect(lines[1]).toContain('"Tham gia"');
     expect(lines[2]).toContain('"B ""Bo"""');
     expect(lines[3]).toContain('"Chưa phản hồi"');
+  });
+});
+
+describe('formatVnTime', () => {
+  it('formats 24h times the Vietnamese way', () => {
+    expect(formatVnTime('16:00')).toBe('4h chiều');
+    expect(formatVnTime('09:30')).toBe('9h30 sáng');
+    expect(formatVnTime('12:00')).toBe('12h trưa');
+    expect(formatVnTime('19:05')).toBe('7h05 tối');
+    expect(formatVnTime('abc')).toBe('abc');
   });
 });

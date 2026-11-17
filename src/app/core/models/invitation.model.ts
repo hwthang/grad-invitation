@@ -16,6 +16,8 @@ export interface InvitationContent {
     heading?: string;
     mapButtonLabel?: string;
     calendarButtonLabel?: string;
+    /** 24h start time, e.g. "16:00"; editable per invitation. */
+    startTime?: string;
     dateLabel?: string;
     timeLabel?: string;
     locationLabel?: string;

@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { GraduationInfo } from '../../../../core/models/graduation-info.model';
 import { ResolvedInvitation } from '../../../../core/models/invitation.model';
+import { formatVnTime } from '../../../../core/utils/format-time';
 import { AppButton } from '../../../../shared/components/button/button';
 import { SectionHeading } from '../../../../shared/components/section-heading/section-heading';
 import { RevealDirective } from '../../../../shared/directives/reveal.directive';
@@ -31,7 +32,7 @@ const DEFAULT_DURATION_HOURS = 3;
           <i class="fa-regular fa-clock w-6 text-center text-xl text-royal" aria-hidden="true"></i>
           <div>
             <p class="text-sm text-muted">{{ event().timeLabel }}</p>
-            <p class="font-medium text-navy">{{ info().event.startTime }}</p>
+            <p class="font-medium text-navy">{{ timeLabel() }}</p>
           </div>
         </li>
         <li data-reveal class="col-span-2 flex items-center justify-center gap-3 text-center rounded-2xl bg-white p-4 shadow-card">
@@ -39,7 +40,9 @@ const DEFAULT_DURATION_HOURS = 3;
           <div>
             <p class="text-sm text-muted">{{ event().locationLabel }}</p>
             <p class="font-medium text-navy">{{ info().event.location }}</p>
-            <p class="text-sm text-muted">{{ info().event.address }}</p>
+            @if (info().event.address) {
+              <p class="text-sm text-muted">{{ info().event.address }}</p>
+            }
           </div>
         </li>
       </ul>
@@ -62,11 +65,14 @@ export class Details {
   readonly info = input.required<GraduationInfo>();
 
   protected readonly start = computed(() => {
-    const { date, startTime } = this.info().event;
+    const { date } = this.info().event;
+    const startTime = this.event().startTime;
     const [y, m, d] = date.split('-').map(Number);
     const [hh, mm] = startTime.split(':').map(Number);
     return new Date(y, m - 1, d, hh || 0, mm || 0);
   });
+
+  protected readonly timeLabel = computed(() => formatVnTime(this.event().startTime));
 
   protected readonly calendarUrl = computed(() => {
     const { event } = this.info();
@@ -76,7 +82,7 @@ export class Details {
       action: 'TEMPLATE',
       text: event.title,
       dates: `${stamp(start)}/${stamp(end)}`,
-      location: `${event.location}, ${event.address}`,
+      location: [event.location, event.address].filter(Boolean).join(', '),
     });
     return `https://calendar.google.com/calendar/render?${params}`;
   });

@@ -15,6 +15,8 @@ interface FieldDef {
   path: string;
   label: string;
   multiline?: boolean;
+  /** Native input type; defaults to text. */
+  type?: 'time';
 }
 
 interface FieldGroup {
@@ -29,6 +31,10 @@ const GROUPS: FieldGroup[] = [
       { path: 'hero.greeting', label: 'Lời chào' },
       { path: 'hero.message', label: 'Lời mời', multiline: true },
     ],
+  },
+  {
+    title: 'Buổi lễ',
+    fields: [{ path: 'event.startTime', label: 'Giờ bắt đầu (mặc định 4h chiều)', type: 'time' }],
   },
   {
     title: 'Xác nhận tham dự',
@@ -135,7 +141,7 @@ const setPath = (obj: Record<string, unknown>, path: string, value: string): voi
                         @if (f.multiline) {
                           <textarea [id]="'c-' + f.path" [formControlName]="f.path" rows="3" [placeholder]="placeholder(f.path)" class="w-full rounded-2xl border border-pastel px-4 py-2.5 outline-none focus:border-royal"></textarea>
                         } @else {
-                          <input [id]="'c-' + f.path" [formControlName]="f.path" [placeholder]="placeholder(f.path)" class="w-full rounded-2xl border border-pastel px-4 py-2.5 outline-none focus:border-royal" />
+                          <input [id]="'c-' + f.path" [type]="f.type ?? 'text'" [formControlName]="f.path" [placeholder]="placeholder(f.path)" class="w-full rounded-2xl border border-pastel px-4 py-2.5 outline-none focus:border-royal" />
                         }
                       </div>
                     }

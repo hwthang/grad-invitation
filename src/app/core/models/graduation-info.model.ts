@@ -9,9 +9,8 @@ export interface GraduationInfo {
     title: string;
     /** ISO date, e.g. 2026-12-20 */
     date: string;
-    /** 24h time, e.g. 09:00 */
-    startTime: string;
     location: string;
+    /** Optional street address, shown under the location when not empty. */
     address: string;
     mapUrl: string;
   };

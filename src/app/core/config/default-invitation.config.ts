@@ -29,6 +29,7 @@ export function defaultInvitationFor(address: Address = 'ban'): ResolvedInvitati
       heading: 'Thông tin buổi lễ',
       mapButtonLabel: 'Xem đường đi',
       calendarButtonLabel: 'Thêm vào lịch',
+      startTime: '16:00',
       dateLabel: 'Ngày',
       timeLabel: 'Thời gian',
       locationLabel: 'Địa điểm',
