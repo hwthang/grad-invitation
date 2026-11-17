@@ -23,7 +23,7 @@ npm run serve  # production: build + serve app and API on :3000
 
 ## Deploy on Vercel
 
-The API runs as a serverless function (`api/[...path].mjs`) and keeps the same single `data.json`
+The API runs as a serverless function (`api/handler.mjs`) and keeps the same single `data.json`
 in a Vercel Blob store (public by default; set env `BLOB_ACCESS=private` if the store is private, the type must match).
 
 1. Import the repo in Vercel (build command and output dir come from `package.json` / `vercel.json`).
