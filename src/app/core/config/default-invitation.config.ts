@@ -30,6 +30,7 @@ export const defaultInvitation: ResolvedInvitation = {
     attendingButton: 'Mình sẽ đến!',
     decliningButton: 'Mình không đến được',
     changeButton: 'Đổi câu trả lời',
+    closeButton: 'Đóng',
     attendingConfirmation: {
       title: 'Tuyệt vời! 🎉',
       message: 'Hẹn gặp bạn trong ngày đặc biệt nhé!',

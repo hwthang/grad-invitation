@@ -35,7 +35,7 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
         </main>
       }
       @case ('ready') {
-        @let r = resolve(s.invitation);
+        @let r = resolved()!;
         <main [attr.data-theme]="r.theme" class="min-h-screen bg-offwhite">
           <app-envelope [guestName]="r.invitation.name" (opened)="reveal()" />
 
@@ -91,9 +91,11 @@ export class InvitationPage {
     return this.localStatus() ?? (s.status === 'ready' ? s.invitation.rsvp.status : 'PENDING');
   });
 
-  protected resolve(invitation: Invitation) {
-    return this.invitations.resolve(invitation);
-  }
+  /** Memoized so child inputs keep stable references across change detection. */
+  protected readonly resolved = computed(() => {
+    const s = this.state();
+    return s.status === 'ready' ? this.invitations.resolve(s.invitation) : null;
+  });
 
   protected reveal(): void {
     this.revealed.set(true);

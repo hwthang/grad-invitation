@@ -35,6 +35,7 @@ export interface InvitationContent {
     attendingButton?: string;
     decliningButton?: string;
     changeButton?: string;
+    closeButton?: string;
 
     attendingConfirmation?: {
       title?: string;

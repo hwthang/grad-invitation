@@ -2,8 +2,6 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  Injector,
-  afterNextRender,
   afterRenderEffect,
   computed,
   inject,
@@ -20,73 +18,68 @@ import { Fireworks } from '../../../../shared/components/fireworks/fireworks';
 import { SectionHeading } from '../../../../shared/components/section-heading/section-heading';
 import { RevealDirective } from '../../../../shared/directives/reveal.directive';
 
-const SPOTLIGHT_MS = 6000;
-
 @Component({
   selector: 'app-rsvp',
   imports: [SectionHeading, AppButton, RevealDirective, Fireworks],
-  host: { '(document:keydown.escape)': 'dismissSpotlight()' },
+  host: { '(document:keydown.escape)': 'closeModal()' },
   template: `
     <app-fireworks #fireworks [autoplay]="false" [colors]="fireworkColors()" />
 
-    <!-- Dark blur behind the thank-you card; click, Esc or a short timeout dismisses it. -->
-    @if (spotlight()) {
-      <div
-        data-backdrop
-        aria-hidden="true"
-        class="fixed inset-0 z-40 bg-navy/60 backdrop-blur-sm"
-        (click)="dismissSpotlight()"
-      ></div>
+    <!-- Thank-you modal, centered in the viewport. Layers: backdrop 40 < fireworks 45 < card 50. -->
+    @if (modalOpen(); as c) {
+      <div data-backdrop aria-hidden="true" class="fixed inset-0 z-40 bg-navy/60 backdrop-blur-sm" (click)="closeModal()"></div>
+      <div class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div
+          data-modal
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="rsvp-modal-title"
+          class="pointer-events-auto w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-card ring-2 ring-sky/50"
+        >
+          <i class="fa-solid fa-circle-check mb-3 text-4xl text-royal" aria-hidden="true"></i>
+          <h3 id="rsvp-modal-title" class="font-display text-2xl text-navy">{{ c.title }}</h3>
+          <p class="mt-3 text-muted">{{ c.message }}</p>
+          <div class="mt-6">
+            <app-button [fullWidth]="true" (clicked)="closeModal()">{{ content().closeButton }}</app-button>
+          </div>
+        </div>
+      </div>
     }
 
     <div appReveal>
-      <div>
-        <div data-reveal>
-          <app-section-heading [heading]="content().heading" icon="fa-regular fa-envelope-open" />
-        </div>
+      <div data-reveal>
+        <app-section-heading [heading]="content().heading" icon="fa-regular fa-envelope-open" />
+      </div>
 
-        <div class="mt-8" aria-live="polite">
-          @switch (status()) {
-            @case ('PENDING') {
-              <div data-reveal class="grid grid-cols-2 gap-3">
-                <app-button [fullWidth]="true" (clicked)="respond('ATTENDING')">
-                  <i class="fa-regular fa-face-smile-beam" aria-hidden="true"></i>
-                  {{ content().attendingButton }}
-                </app-button>
-                <app-button variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
-                  <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
-                  {{ content().decliningButton }}
-                </app-button>
-              </div>
-            }
-
-            @default {
-              @if (confirmation(); as c) {
-                <div
-                  data-confirm
-                  class="rounded-2xl bg-soft p-6 text-center"
-                  [class.relative]="spotlight()"
-                  [class.z-50]="spotlight()"
-                  [class.shadow-glow]="spotlight()"
-                >
-                  <i
-                    [class]="status() === 'ATTENDING' ? 'fa-solid fa-circle-check text-royal' : 'fa-solid fa-heart text-sky'"
-                    class="mb-2 text-3xl"
-                    aria-hidden="true"
-                  ></i>
-                  <h3 class="font-display text-xl text-navy">{{ c.title }}</h3>
-                  <p class="mt-2 text-muted">{{ c.message }}</p>
-                  <div class="mt-4">
-                    <app-button variant="secondary" (clicked)="respond('PENDING')">
-                      <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
-                      {{ content().changeButton }}
-                    </app-button>
-                  </div>
-                </div>
-              }
-            }
-          }
-        </div>
+      <div class="mt-8" aria-live="polite">
+        @if (status() === 'PENDING') {
+          <div data-reveal class="grid grid-cols-2 gap-3">
+            <app-button [fullWidth]="true" (clicked)="respond('ATTENDING')">
+              <i class="fa-regular fa-face-smile-beam" aria-hidden="true"></i>
+              {{ content().attendingButton }}
+            </app-button>
+            <app-button variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
+              <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
+              {{ content().decliningButton }}
+            </app-button>
+          </div>
+        } @else if (confirmation(); as c) {
+          <div class="rounded-2xl bg-soft p-6 text-center">
+            <i
+              [class]="status() === 'ATTENDING' ? 'fa-solid fa-circle-check text-royal' : 'fa-solid fa-heart text-sky'"
+              class="mb-2 text-3xl"
+              aria-hidden="true"
+            ></i>
+            <h3 class="font-display text-xl text-navy">{{ c.title }}</h3>
+            <p class="mt-2 text-muted">{{ c.message }}</p>
+            <div class="mt-4">
+              <app-button variant="secondary" (clicked)="respond('PENDING')">
+                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                {{ content().changeButton }}
+              </app-button>
+            </div>
+          </div>
+        }
       </div>
     </div>
   `,
@@ -94,16 +87,13 @@ const SPOTLIGHT_MS = 6000;
 export class Rsvp {
   readonly content = input.required<ResolvedInvitation['rsvp']>();
   readonly status = input.required<RSVPStatus>();
-  readonly responded = output<RSVPStatus>();
   readonly fireworkColors = input.required<readonly string[]>();
+  readonly responded = output<RSVPStatus>();
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly injector = inject(Injector);
   private readonly fireworks = viewChild.required<Fireworks>('fireworks');
-  private spotlightTimer?: ReturnType<typeof setTimeout>;
 
-  /** True while the dark blur is shown after the visitor confirms attendance. */
-  protected readonly spotlight = signal(false);
+  private readonly modal = signal(false);
 
   protected readonly confirmation = computed(() => {
     const c = this.content();
@@ -117,55 +107,40 @@ export class Rsvp {
     }
   });
 
-  constructor() {
-    inject(DestroyRef).onDestroy(() => clearTimeout(this.spotlightTimer));
+  /** The attending message while the modal is open, otherwise false. */
+  protected readonly modalOpen = computed(() =>
+    this.modal() && this.status() === 'ATTENDING' ? this.content().attendingConfirmation : false,
+  );
 
-    // Fade the dark blur in when it appears.
+  constructor() {
+    inject(DestroyRef).onDestroy(() => gsap.killTweensOf(this.host.querySelectorAll('[data-backdrop], [data-modal]')));
+
+    // Fade/scale the modal in when it appears.
     afterRenderEffect(() => {
-      if (!this.spotlight() || prefersReducedMotion()) return;
+      if (!this.modalOpen() || prefersReducedMotion()) return;
       untracked(() => {
-        const el = this.host.querySelector('[data-backdrop]');
-        if (el) gsap.from(el, { opacity: 0, duration: 0.4, ease: 'power2.out' });
+        const backdrop = this.host.querySelector('[data-backdrop]');
+        const card = this.host.querySelector('[data-modal]');
+        if (backdrop) gsap.from(backdrop, { opacity: 0, duration: 0.35, ease: 'power2.out' });
+        if (card) gsap.from(card, { opacity: 0, scale: 0.9, y: 16, duration: 0.45, ease: 'back.out(1.5)', clearProps: 'all' });
       });
     });
 
-    // Scale/fade the confirmation card in whenever a response is recorded.
+    // Move focus into the modal so keyboard users land on it.
     afterRenderEffect(() => {
-      if (this.status() === 'PENDING' || prefersReducedMotion()) return;
-      untracked(() => {
-        const el = this.host.querySelector('[data-confirm]');
-        if (el) gsap.from(el, { opacity: 0, scale: 0.92, duration: 0.5, ease: 'back.out(1.6)', clearProps: 'all' });
-      });
+      if (!this.modalOpen()) return;
+      untracked(() => this.host.querySelector<HTMLElement>('[data-modal] button')?.focus({ preventScroll: true }));
     });
   }
 
   protected respond(status: RSVPStatus): void {
     this.responded.emit(status);
-    if (status === 'ATTENDING') this.celebrate();
-    else this.dismissSpotlight(false);
+    // Only an explicit "attending" click opens the modal, never a restored response.
+    this.modal.set(status === 'ATTENDING');
+    if (status === 'ATTENDING') this.fireworks().play();
   }
 
-  /** Only runs on an explicit "attending" click, never when a saved response is restored. */
-  private celebrate(): void {
-    this.spotlight.set(true);
-    this.fireworks().play();
-    clearTimeout(this.spotlightTimer);
-    this.spotlightTimer = setTimeout(() => this.dismissSpotlight(), SPOTLIGHT_MS);
-
-    afterNextRender(
-      () =>
-        this.host
-          .querySelector('[data-confirm]')
-          ?.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' }),
-      { injector: this.injector },
-    );
-  }
-
-  protected dismissSpotlight(animate = true): void {
-    clearTimeout(this.spotlightTimer);
-    const el = this.host.querySelector('[data-backdrop]');
-    if (!this.spotlight()) return;
-    if (!animate || !el || prefersReducedMotion()) return this.spotlight.set(false);
-    gsap.to(el, { opacity: 0, duration: 0.35, ease: 'power2.in', onComplete: () => this.spotlight.set(false) });
+  protected closeModal(): void {
+    this.modal.set(false);
   }
 }
