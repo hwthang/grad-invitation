@@ -28,7 +28,7 @@ export const defaultInvitation: ResolvedInvitation = {
   rsvp: {
     heading: 'Bạn sẽ đến chứ?',
     attendingButton: 'Mình sẽ đến!',
-    decliningButton: 'Mình không đến được',
+    decliningButton: 'Mình bận ùi',
     changeButton: 'Đổi câu trả lời',
     closeButton: 'Đóng',
     attendingConfirmation: {

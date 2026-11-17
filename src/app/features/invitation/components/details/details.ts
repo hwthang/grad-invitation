@@ -44,7 +44,10 @@ const DEFAULT_DURATION_HOURS = 3;
         </li>
       </ul>
 
-      <p data-reveal class="mt-6 text-center text-muted">{{ event().invitationMessage }}</p>
+      <div data-reveal class="mt-8 rounded-2xl bg-white/70 px-5 py-6 text-center shadow-card">
+        <i class="fa-solid fa-heart mb-2 text-xl text-royal" aria-hidden="true"></i>
+        <p class="font-display text-2xl font-medium leading-snug text-navy sm:text-3xl">{{ event().invitationMessage }}</p>
+      </div>
 
       <div data-reveal class="mt-6 grid gap-3 sm:grid-cols-2">
         <app-button [fullWidth]="true" [href]="info().event.mapUrl">

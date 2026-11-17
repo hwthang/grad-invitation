@@ -59,7 +59,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
               {{ content().attendingButton }}
             </app-button>
             <app-button variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
-              <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
+              <i class="fa-regular fa-face-sad-tear" aria-hidden="true"></i>
               {{ content().decliningButton }}
             </app-button>
           </div>
