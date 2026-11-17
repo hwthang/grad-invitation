@@ -52,7 +52,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
       </div>
 
       <div class="mt-8" aria-live="polite">
-        @if (showChoices()) {
+        @if (status() === 'PENDING') {
           <div data-reveal class="grid grid-cols-2 gap-3">
             <app-button [fullWidth]="true" (clicked)="respond('ATTENDING')">
               <i class="fa-regular fa-face-smile-beam" aria-hidden="true"></i>
@@ -73,7 +73,7 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
             <h3 class="font-display text-xl text-navy">{{ c.title }}</h3>
             <p class="mt-2 text-muted">{{ c.message }}</p>
             <div class="mt-4">
-              <app-button variant="secondary" (clicked)="startChange()">
+              <app-button variant="secondary" (clicked)="respond('PENDING')">
                 <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                 {{ content().changeButton }}
               </app-button>
@@ -94,10 +94,6 @@ export class Rsvp {
   private readonly fireworks = viewChild.required<Fireworks>('fireworks');
 
   private readonly modal = signal(false);
-  /** True while the guest is re-choosing; the saved answer stays untouched until they pick. */
-  private readonly changing = signal(false);
-
-  protected readonly showChoices = computed(() => this.status() === 'PENDING' || this.changing());
 
   protected readonly confirmation = computed(() => {
     const c = this.content();
@@ -137,12 +133,7 @@ export class Rsvp {
     });
   }
 
-  protected startChange(): void {
-    this.changing.set(true);
-  }
-
   protected respond(status: RSVPStatus): void {
-    this.changing.set(false);
     this.responded.emit(status);
     // Only an explicit "attending" click opens the modal, never a restored response.
     this.modal.set(status === 'ATTENDING');
