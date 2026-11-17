@@ -46,3 +46,6 @@ Thumbs.db
 # Guest data (names, RSVPs)
 /data/data.json
 /data/data.json.tmp
+
+# Vercel
+.vercel

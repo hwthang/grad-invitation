@@ -21,6 +21,19 @@ npm run dev    # Angular dev server on :4200, proxies /api to :3000
 npm run serve  # production: build + serve app and API on :3000
 ```
 
+## Deploy on Vercel
+
+The API runs as a serverless function (`api/[...path].mjs`) and keeps the same single `data.json`
+in a **private Vercel Blob** store.
+
+1. Import the repo in Vercel (build command and output dir come from `package.json` / `vercel.json`).
+2. Project → **Storage** → create a **Blob** store, access **Private**, and connect it to the project.
+   This adds the `BLOB_READ_WRITE_TOKEN` env var.
+3. Redeploy. Open `/` and log in.
+
+Locally, `BLOB_READ_WRITE_TOKEN` is not set, so the file in `../grad-invitation-data/` is used.
+Writes use the blob ETag, so two simultaneous RSVPs do not overwrite each other.
+
 > The admin login is checked in the browser only and the API has no auth, so anyone who knows the
 > URLs can call it. Treat this as a hobby setup, not a secured one.
 

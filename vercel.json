@@ -1,0 +1,4 @@
+{
+  "outputDirectory": "dist/grad-invitation/browser",
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
+}
