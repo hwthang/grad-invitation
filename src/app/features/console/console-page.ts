@@ -6,7 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { InvitationApi } from '../../core/services/invitation-api.service';
 import { DEFAULT_AVATAR } from '../../core/services/invitation.service';
 import { themedAsset } from '../../core/config/theme-assets.config';
-import { STATUS_LABEL, downloadText, rsvpToCsv } from '../../core/utils/export-rsvp';
+import { STATUS_LABEL, downloadText, rsvpToCsv, rsvpToJson } from '../../core/utils/export-rsvp';
 import { KEY_PATTERN, slugify } from '../../core/utils/slugify';
 import { AppButton } from '../../shared/components/button/button';
 import { Loading } from '../../shared/components/loading/loading';
@@ -24,7 +24,10 @@ import { Loading } from '../../shared/components/loading/loading';
               <i class="fa-solid fa-plus" aria-hidden="true"></i> Thêm thiệp
             </app-button>
             <app-button variant="secondary" (clicked)="exportCsv()">
-              <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> Xuất danh sách
+              <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> Xuất CSV
+            </app-button>
+            <app-button variant="secondary" (clicked)="exportJson()">
+              <i class="fa-solid fa-file-code" aria-hidden="true"></i> Xuất JSON
             </app-button>
             <app-button variant="secondary" (clicked)="logout()">Đăng xuất</app-button>
           </div>
@@ -194,6 +197,10 @@ export class ConsolePage {
 
   protected exportCsv(): void {
     downloadText('danh-sach-khach.csv', rsvpToCsv(this.items() ?? []));
+  }
+
+  protected exportJson(): void {
+    downloadText('danh-sach-khach.json', rsvpToJson(this.items() ?? []), 'application/json');
   }
 
   protected logout(): void {

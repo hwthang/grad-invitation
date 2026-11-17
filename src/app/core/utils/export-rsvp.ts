@@ -25,3 +25,9 @@ export function downloadText(filename: string, text: string, type = 'text/csv;ch
   a.click();
   URL.revokeObjectURL(url);
 }
+
+/** JSON list of every guest and their answer (no avatars or page content). */
+export function rsvpToJson(invitations: readonly Invitation[]): string {
+  const list = invitations.map((i) => ({ key: i.key, name: i.name, status: i.rsvp.status, updatedAt: i.rsvp.updatedAt }));
+  return JSON.stringify(list, null, 2);
+}

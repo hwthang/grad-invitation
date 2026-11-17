@@ -66,6 +66,7 @@ export class Envelope {
   private readonly btn = viewChild<ElementRef<HTMLElement>>('btn');
   private busy = false;
   private tl?: gsap.core.Timeline;
+  private float?: gsap.core.Tween;
   private previousOverflow = '';
 
   constructor() {
@@ -77,10 +78,21 @@ export class Envelope {
       const el = this.overlay()?.nativeElement;
       if (prefersReducedMotion() || !el || !btn) return;
       gsap.from(el.querySelectorAll('[data-env-text]'), { opacity: 0, y: 16, duration: 0.8, stagger: 0.2, ease: 'power3.out' });
-      gsap.from(btn, { opacity: 0, y: 30, scale: 0.92, duration: 0.9, ease: 'back.out(1.4)' });
+      gsap.from(btn, {
+        opacity: 0,
+        y: 30,
+        scale: 0.92,
+        duration: 0.9,
+        ease: 'back.out(1.4)',
+        onComplete: () => {
+          if (this.busy) return;
+          this.float = gsap.to(btn, { y: -8, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+        },
+      });
     });
     inject(DestroyRef).onDestroy(() => {
       this.tl?.kill();
+      this.float?.kill();
       document.body.style.overflow = this.previousOverflow;
     });
   }
@@ -100,13 +112,24 @@ export class Envelope {
       return finish();
     }
 
+    const q = (sel: string) => el.querySelector(sel);
+    const card = q('[data-env-card]');
+    const flap = q('[data-env-flap]');
+    const btn = this.btn()!.nativeElement;
+
+    this.float?.kill();
     this.tl = gsap
-      .timeline()
-      .to(el.querySelector('[data-env-seal]'), { scale: 0, opacity: 0, duration: 0.25, ease: 'back.in(2)' })
-      .to(el.querySelector('[data-env-flap]'), { rotationX: 180, duration: 0.6, ease: 'power2.inOut' }, '-=0.05')
-      .to(el.querySelector('[data-env-card]'), { yPercent: -70, scale: 1.08, duration: 0.7, ease: 'power3.out' }, '-=0.15')
-      .to(el.querySelectorAll('[data-env-text]'), { opacity: 0, duration: 0.3 }, '<')
-      .add(() => this.opened.emit(), '+=0.25')
-      .to(el, { opacity: 0, duration: 0.7, ease: 'power2.inOut', onComplete: finish }, '<');
+      .timeline({ defaults: { ease: 'power2.inOut', force3D: true } })
+      .to(el.querySelectorAll('[data-env-text]'), { opacity: 0, y: -8, duration: 0.4, ease: 'power1.out' }, 0)
+      .to(q('[data-env-seal]'), { scale: 1.2, duration: 0.18, ease: 'power1.out' }, 0)
+      .to(q('[data-env-seal]'), { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(2)' }, 0.18)
+      .to(btn, { y: 0, duration: 0.4 }, 0)
+      .to(flap, { rotationX: 180, duration: 0.85 }, 0.3)
+      .set(flap, { zIndex: 0 }, 0.7)
+      .to(card, { yPercent: -75, duration: 1, ease: 'power3.out' }, 0.75)
+      .to(btn, { y: 70, opacity: 0, duration: 0.8 }, 1.0)
+      .to(card, { scale: 1.12, duration: 0.9, ease: 'power2.out' }, 1.05)
+      .add(() => this.opened.emit(), 1.55)
+      .to(el, { opacity: 0, duration: 0.9, ease: 'power1.inOut', onComplete: finish }, 1.55);
   }
 }
