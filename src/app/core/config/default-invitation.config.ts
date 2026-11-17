@@ -62,7 +62,7 @@ export function defaultInvitationFor(address: Address = 'ban'): ResolvedInvitati
 
     closing: {
       heading: `Cảm ơn ${you}!`,
-      message: `Mãi bên nhau ${you} nhó`,
+      message: `Có ${you} ở đó là ${me} vui lắm rồi.`,
       signature: 'Thân mến,',
     },
   };
