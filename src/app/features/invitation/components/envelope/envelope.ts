@@ -1,5 +1,5 @@
 import { Component, DestroyRef, ElementRef, afterNextRender, inject, input, output, signal, viewChild } from '@angular/core';
-import { gsap, prefersReducedMotion } from '../../../../shared/animation';
+import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/animation';
 
 /**
  * Full-screen "open the invitation" intro. Tap the envelope: the seal pops, the flap opens, the
@@ -105,6 +105,8 @@ export class Envelope {
     const finish = () => {
       document.body.style.overflow = this.previousOverflow;
       this.gone.set(true);
+      // Scroll positions were measured while scrolling was locked; measure again.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     };
 
     if (prefersReducedMotion()) {

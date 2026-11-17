@@ -1,5 +1,5 @@
 import { DestroyRef, Directive, ElementRef, afterNextRender, inject, input } from '@angular/core';
-import { gsap, prefersReducedMotion } from '../animation';
+import { ScrollTrigger, gsap, prefersReducedMotion } from '../animation';
 
 /**
  * Staggered entrance for every descendant marked with `data-reveal`
@@ -33,6 +33,9 @@ export class RevealDirective {
         });
       }, this.host);
 
+      // Layout (images, fonts) may still shift; re-measure trigger positions once it settles.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
       this.cleanup = () => ctx.revert();
     });
 
