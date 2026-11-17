@@ -51,11 +51,11 @@ export function defaultInvitationFor(address: Address = 'ban'): ResolvedInvitati
       closeButton: 'Đóng',
       attendingConfirmation: {
         title: 'Tuyệt vời! 🎉',
-        message: `Hẹn gặp ${you} trong ngày đặc biệt nhé!`,
+        message: `Hẹn gặp ${you} vào ngày hôm đó nha!`,
       },
       decliningConfirmation: {
         title: 'Không sao đâu!',
-        message: `Cảm ơn ${you} đã phản hồi và những lời chúc!`,
+        message: `Cảm ơn ${you} nhe!`,
       },
     },
 

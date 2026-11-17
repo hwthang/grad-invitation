@@ -113,11 +113,17 @@ export class InvitationPage {
     this.revealed.set(true);
   }
 
+  private responseSeq = 0;
+
   protected respond(key: string, status: RSVPStatus): void {
-    const previous = this.localStatus();
+    const previous = this.status();
+    const seq = ++this.responseSeq;
     this.localStatus.set(status); // optimistic
     this.api.respond(key, status).subscribe({
-      error: () => this.localStatus.set(previous), // roll back so the guest can retry
+      // Roll back only if no newer answer was given meanwhile, so the guest can retry.
+      error: () => {
+        if (seq === this.responseSeq) this.localStatus.set(previous);
+      },
     });
   }
 }
