@@ -5,7 +5,8 @@ import { dirname, extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const DATA_FILE = process.env.DATA_FILE ? resolve(process.env.DATA_FILE) : join(ROOT, 'data', 'data.json');
+// Kept outside the project folder: ng serve watches the project and reloads the page on every save.
+const DATA_FILE = process.env.DATA_FILE ? resolve(process.env.DATA_FILE) : join(ROOT, '..', 'grad-invitation-data', 'data.json');
 const STATIC_DIR = join(ROOT, 'dist', 'grad-invitation', 'browser');
 const PORT = Number(process.env.PORT) || 3000;
 const MAX_BODY = 4 * 1024 * 1024; // avatars are stored as small data URLs

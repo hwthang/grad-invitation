@@ -13,7 +13,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Data & running
 
-All data lives in one file, `data/data.json` (git-ignored), read and written by `server/index.mjs`.
+All data lives in one file, `../grad-invitation-data/data.json` (next to the project folder, so `ng serve` does not reload on every save), read and written by `server/index.mjs`. Override with the `DATA_FILE` env var.
 
 ```bash
 npm run api    # API on :3000
