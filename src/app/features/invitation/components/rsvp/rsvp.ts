@@ -42,7 +42,7 @@ const SPOTLIGHT_MS = 6000;
     <section appReveal class="bg-gradient-to-b from-ice to-soft px-4 py-20">
       <div class="mx-auto max-w-3xl">
         <div data-reveal>
-          <app-section-heading [heading]="content().heading" [description]="content().subtitle" icon="fa-regular fa-envelope-open" />
+          <app-section-heading [heading]="content().heading" icon="fa-regular fa-envelope-open" />
         </div>
 
         <div class="mt-10" aria-live="polite">

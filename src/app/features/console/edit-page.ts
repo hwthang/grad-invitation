@@ -28,7 +28,6 @@ const GROUPS: FieldGroup[] = [
     fields: [
       { path: 'hero.greeting', label: 'Lời chào' },
       { path: 'hero.message', label: 'Lời mời', multiline: true },
-      { path: 'hero.subtitle', label: 'Dòng phụ' },
     ],
   },
   {
@@ -37,7 +36,6 @@ const GROUPS: FieldGroup[] = [
       { path: 'profile.heading', label: 'Tiêu đề' },
       { path: 'profile.personalMessage', label: 'Lời nhắn riêng' },
       { path: 'profile.quote', label: 'Trích dẫn (tuỳ chọn)' },
-      { path: 'event.subtitle', label: 'Dòng phụ phần lễ' },
       { path: 'event.invitationMessage', label: 'Lời mời tham dự' },
     ],
   },
@@ -45,7 +43,6 @@ const GROUPS: FieldGroup[] = [
     title: 'Xác nhận tham dự',
     fields: [
       { path: 'rsvp.heading', label: 'Tiêu đề' },
-      { path: 'rsvp.subtitle', label: 'Mô tả', multiline: true },
       { path: 'rsvp.attendingButton', label: 'Nút tham gia' },
       { path: 'rsvp.decliningButton', label: 'Nút từ chối' },
       { path: 'rsvp.attendingConfirmation.title', label: 'Cảm ơn (tham gia) - tiêu đề' },

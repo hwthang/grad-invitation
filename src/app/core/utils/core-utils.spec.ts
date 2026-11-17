@@ -56,7 +56,7 @@ describe('InvitationService', () => {
   it('inherits defaults for omitted fields and overrides provided ones', () => {
     const { content } = service.resolve(invitation({ content: { hero: { greeting: 'Gửi A,' } } }));
     expect(content.hero.greeting).toBe('Gửi A,');
-    expect(content.hero.subtitle).toBe(defaultInvitation.hero.subtitle);
+    expect(content.hero.message).toBe(defaultInvitation.hero.message);
     expect(content.gallery.images).toEqual([]);
   });
 

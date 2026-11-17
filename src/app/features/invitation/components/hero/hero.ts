@@ -29,7 +29,6 @@ import { RevealDirective } from '../../../../shared/directives/reveal.directive'
         <h1 data-reveal class="mt-4 font-display text-3xl font-medium leading-snug text-navy sm:text-4xl">
           {{ content().message }}
         </h1>
-        <p data-reveal class="mt-5 text-lg text-muted">{{ content().subtitle }}</p>
 
         <i data-reveal class="fa-solid fa-graduation-cap mt-10 text-3xl text-sky" aria-hidden="true"></i>
       </div>

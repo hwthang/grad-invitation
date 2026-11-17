@@ -4,7 +4,6 @@ export const defaultInvitation: ResolvedInvitation = {
   hero: {
     greeting: 'Thân gửi bạn,',
     message: 'Mình trân trọng mời bạn đến dự lễ tốt nghiệp của mình.',
-    subtitle: 'Hy vọng được gặp bạn hôm đó!',
   },
 
   profile: {
@@ -17,7 +16,6 @@ export const defaultInvitation: ResolvedInvitation = {
 
   event: {
     heading: 'Thông tin buổi lễ',
-    subtitle: 'Hẹn gặp bạn nhé!',
     invitationMessage: 'Sự có mặt của bạn là niềm vui của mình.',
     mapButtonLabel: 'Xem đường đi',
     calendarButtonLabel: 'Thêm vào lịch',
@@ -37,7 +35,6 @@ export const defaultInvitation: ResolvedInvitation = {
 
   rsvp: {
     heading: 'Bạn sẽ đến chứ?',
-    subtitle: 'Cảm ơn bạn đã ghé qua lời mời này!',
     attendingButton: 'Mình sẽ đến!',
     decliningButton: 'Mình không đến được',
     changeButton: 'Đổi câu trả lời',

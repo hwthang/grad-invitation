@@ -44,7 +44,7 @@ const DEFAULT_DURATION_HOURS = 3;
 
         <div class="mt-16">
           <div data-reveal>
-            <app-section-heading [heading]="event().heading" [description]="event().subtitle" icon="fa-solid fa-calendar-days" />
+            <app-section-heading [heading]="event().heading" icon="fa-solid fa-calendar-days" />
           </div>
           <p data-reveal class="mt-6 text-center font-display text-xl text-navy">{{ info().event.title }}</p>
 

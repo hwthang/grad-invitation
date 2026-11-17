@@ -9,7 +9,6 @@ export interface InvitationContent {
   hero?: {
     greeting?: string;
     message?: string;
-    subtitle?: string;
     image?: string;
   };
 
@@ -24,7 +23,6 @@ export interface InvitationContent {
 
   event?: {
     heading?: string;
-    subtitle?: string;
     invitationMessage?: string;
     mapButtonLabel?: string;
     calendarButtonLabel?: string;
@@ -43,7 +41,6 @@ export interface InvitationContent {
 
   rsvp?: {
     heading?: string;
-    subtitle?: string;
     attendingButton?: string;
     decliningButton?: string;
     changeButton?: string;
