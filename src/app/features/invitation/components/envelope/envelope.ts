@@ -27,7 +27,7 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
           aria-label="Mở thiệp"
           (click)="open()"
         >
-          <span class="absolute inset-0 rounded-2xl bg-pastel shadow-card"></span>
+          <span data-env-body class="absolute inset-0 rounded-2xl bg-pastel shadow-card"></span>
           <span
             data-env-card
             class="absolute inset-x-4 bottom-2 top-4 flex flex-col items-center justify-center rounded-xl bg-white text-center shadow-card"
@@ -35,16 +35,17 @@ import { ScrollTrigger, gsap, prefersReducedMotion } from '../../../../shared/an
             <i class="fa-solid fa-graduation-cap mb-2 text-3xl text-royal" aria-hidden="true"></i>
             <span class="font-display text-xl text-navy">Lễ Tốt Nghiệp</span>
           </span>
+          <!-- front of the envelope; hides the card until it flies up -->
+          <span data-env-body class="absolute inset-0 rounded-2xl bg-sky"></span>
+          <!-- triangle at the bottom: folds down out of the way when opened -->
           <span
-            class="absolute inset-x-0 bottom-0 h-3/5 rounded-b-2xl bg-sky [clip-path:polygon(0_0,50%_55%,100%_0,100%_100%,0_100%)]"
-          ></span>
-          <span
+            data-env-body
             data-env-flap
-            class="absolute inset-x-0 top-0 h-3/5 origin-top rounded-t-2xl bg-royal [clip-path:polygon(0_0,100%_0,50%_100%)]"
+            class="absolute inset-x-0 bottom-0 h-3/5 origin-bottom rounded-b-2xl bg-royal [clip-path:polygon(0_100%,100%_100%,50%_0)]"
           ></span>
           <span
             data-env-seal
-            class="absolute left-1/2 top-[52%] z-10 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-royal shadow-card"
+            class="absolute left-1/2 top-[42%] z-10 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-royal shadow-card"
           >
             <i class="fa-solid fa-heart" aria-hidden="true"></i>
           </span>
@@ -126,12 +127,12 @@ export class Envelope {
       .to(q('[data-env-seal]'), { scale: 1.2, duration: 0.18, ease: 'power1.out' }, 0)
       .to(q('[data-env-seal]'), { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(2)' }, 0.18)
       .to(btn, { y: 0, duration: 0.4 }, 0)
-      .to(flap, { rotationX: 180, duration: 0.85 }, 0.3)
-      .set(flap, { zIndex: 0 }, 0.7)
-      .to(card, { yPercent: -75, duration: 1, ease: 'power3.out' }, 0.75)
-      .to(btn, { y: 70, opacity: 0, duration: 0.8 }, 1.0)
-      .to(card, { scale: 1.12, duration: 0.9, ease: 'power2.out' }, 1.05)
-      .add(() => this.opened.emit(), 1.55)
-      .to(el, { opacity: 0, duration: 0.9, ease: 'power1.inOut', onComplete: finish }, 1.55);
+      // The triangle at the bottom folds forward and down, clearing the way.
+      .to(flap, { rotationX: -180, duration: 0.8 }, 0.3)
+      // The card flies up out of the envelope.
+      .to(card, { yPercent: -120, scale: 1.1, duration: 1.1, ease: 'power3.out' }, 0.75)
+      .to(el.querySelectorAll('[data-env-body]'), { y: 50, opacity: 0, duration: 0.7 }, 1.15)
+      .add(() => this.opened.emit(), 1.7)
+      .to(el, { opacity: 0, duration: 0.9, ease: 'power1.inOut', onComplete: finish }, 1.7);
   }
 }
