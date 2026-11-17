@@ -45,14 +45,16 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
             <section class="bg-gradient-to-b from-soft to-ice px-4 py-16 sm:py-20">
               <div class="mx-auto grid max-w-5xl items-start gap-12 md:grid-cols-2 md:gap-10">
                 <app-details [event]="r.content.event" [info]="r.info" />
-                <div class="space-y-12">
+                <div class="rounded-3xl bg-white p-6 shadow-card sm:p-8">
                   <app-rsvp
                     [content]="r.content.rsvp"
                     [status]="status()"
                     [fireworkColors]="colors[r.theme]"
                     (responded)="respond(r.invitation.key, $event)"
                   />
-                  <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
+                  <div class="mt-8 border-t border-ice pt-8">
+                    <app-closing [content]="r.content.closing" [graduateName]="r.info.graduateName" />
+                  </div>
                 </div>
               </div>
             </section>

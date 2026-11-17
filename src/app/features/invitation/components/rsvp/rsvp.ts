@@ -48,17 +48,15 @@ const SPOTLIGHT_MS = 6000;
         <div class="mt-8" aria-live="polite">
           @switch (status()) {
             @case ('PENDING') {
-              <div class="grid gap-4">
-                <div data-reveal class="flex flex-col items-center rounded-3xl bg-white p-6 text-center shadow-card">
-                  <i class="fa-regular fa-face-smile-beam mb-3 text-3xl text-royal" aria-hidden="true"></i>
-                  <app-button class="w-full flex-1" [fullWidth]="true" (clicked)="respond('ATTENDING')">{{ content().attendingButton }}</app-button>
-                </div>
-                <div data-reveal class="flex flex-col items-center rounded-3xl bg-white p-6 text-center shadow-card">
-                  <i class="fa-regular fa-face-smile mb-3 text-3xl text-sky" aria-hidden="true"></i>
-                  <app-button class="w-full flex-1" variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
-                    {{ content().decliningButton }}
-                  </app-button>
-                </div>
+              <div data-reveal class="flex flex-col gap-3">
+                <app-button [fullWidth]="true" (clicked)="respond('ATTENDING')">
+                  <i class="fa-regular fa-face-smile-beam" aria-hidden="true"></i>
+                  {{ content().attendingButton }}
+                </app-button>
+                <app-button variant="secondary" [fullWidth]="true" (clicked)="respond('NOT_ATTENDING')">
+                  <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
+                  {{ content().decliningButton }}
+                </app-button>
               </div>
             }
 
@@ -66,19 +64,19 @@ const SPOTLIGHT_MS = 6000;
               @if (confirmation(); as c) {
                 <div
                   data-confirm
-                  class="rounded-3xl bg-white p-8 text-center shadow-card ring-2 ring-sky/50"
+                  class="rounded-2xl bg-soft p-6 text-center"
                   [class.relative]="spotlight()"
                   [class.z-50]="spotlight()"
                   [class.shadow-glow]="spotlight()"
                 >
                   <i
                     [class]="status() === 'ATTENDING' ? 'fa-solid fa-circle-check text-royal' : 'fa-solid fa-heart text-sky'"
-                    class="mb-3 text-4xl"
+                    class="mb-2 text-3xl"
                     aria-hidden="true"
                   ></i>
-                  <h3 class="font-display text-2xl text-navy">{{ c.title }}</h3>
-                  <p class="mx-auto mt-3 max-w-lg text-muted">{{ c.message }}</p>
-                  <div class="mt-6">
+                  <h3 class="font-display text-xl text-navy">{{ c.title }}</h3>
+                  <p class="mt-2 text-muted">{{ c.message }}</p>
+                  <div class="mt-4">
                     <app-button variant="secondary" (clicked)="respond('PENDING')">
                       <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                       {{ content().changeButton }}
