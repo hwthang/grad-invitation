@@ -43,7 +43,7 @@ type LoadState = { status: 'loading' } | { status: 'missing' } | { status: 'read
             <app-fireworks [colors]="colors[r.theme]" />
             <app-hero [content]="r.content.hero" [image]="r.avatar" [imageAlt]="r.invitation.name" [fallbackImage]="r.fallbackImage" />
             <section class="bg-gradient-to-b from-soft to-ice px-4 py-16 sm:py-20">
-              <div class="mx-auto grid max-w-5xl items-start gap-12 md:grid-cols-2 md:gap-10">
+              <div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-10">
                 <app-details [event]="r.content.event" [info]="r.info" />
                 <div class="rounded-3xl bg-white p-6 shadow-card sm:p-8">
                   <app-rsvp
