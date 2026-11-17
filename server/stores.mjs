@@ -41,13 +41,16 @@ export function fileStore(file) {
   return { read, mutate };
 }
 
-/** Needs a *private* Vercel Blob store and BLOB_READ_WRITE_TOKEN. Writes use the ETag to detect races. */
+// Must match the Blob store type. Set BLOB_ACCESS=private for a private store.
+const ACCESS = process.env.BLOB_ACCESS === 'private' ? 'private' : 'public';
+
+/** Needs a Vercel Blob store and BLOB_READ_WRITE_TOKEN. Writes use the ETag to detect races. */
 export function blobStore(pathname = 'data.json') {
   const sdk = import('@vercel/blob');
 
   async function load() {
     const { get } = await sdk;
-    const res = await get(pathname, { access: 'private', useCache: false });
+    const res = await get(pathname, { access: ACCESS, useCache: false });
     if (!res || res.statusCode !== 200) return { db: empty(), etag: undefined };
     const text = await new Response(res.stream).text();
     return { db: normalize(JSON.parse(text)), etag: res.blob.etag };
@@ -64,7 +67,7 @@ export function blobStore(pathname = 'data.json') {
       const result = await fn(db);
       try {
         await put(pathname, JSON.stringify(db), {
-          access: 'private',
+          access: ACCESS,
           contentType: 'application/json',
           addRandomSuffix: false,
           allowOverwrite: true,

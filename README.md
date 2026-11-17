@@ -24,10 +24,10 @@ npm run serve  # production: build + serve app and API on :3000
 ## Deploy on Vercel
 
 The API runs as a serverless function (`api/[...path].mjs`) and keeps the same single `data.json`
-in a **private Vercel Blob** store.
+in a Vercel Blob store (public by default; set env `BLOB_ACCESS=private` if the store is private, the type must match).
 
 1. Import the repo in Vercel (build command and output dir come from `package.json` / `vercel.json`).
-2. Project → **Storage** → create a **Blob** store, access **Private**, and connect it to the project.
+2. Project → **Storage** → create a **Blob** store and connect it to the project.
    This adds the `BLOB_READ_WRITE_TOKEN` env var.
 3. Redeploy. Open `/` and log in.
 
